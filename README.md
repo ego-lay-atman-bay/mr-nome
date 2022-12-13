@@ -1,2 +1,2 @@
 # mr nome
- Advanced metronome made using node.js
+ Advanced metronome made using vanilla javascript.
