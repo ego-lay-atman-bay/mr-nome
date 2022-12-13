@@ -18,6 +18,7 @@
     clip-path: circle();
     border: none;
     background: none;
+    cursor: pointer;
 }
 
 .play-button svg path {
