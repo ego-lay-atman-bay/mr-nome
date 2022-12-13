@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Mr. Nome</title>
+        <meta name="description" content="Advanced online metronome.">
+        <meta name="name" content="Mr. Nome">
+        <meta name="keywords" content="metronome, music">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/common/css/common.css">
+        <link rel="stylesheet" href="style.css">
+
+        <script src="/common/js/jquery-3.6.0.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <script>
+            $(function () {
+                $("#primary-nav").load("/common/nav/nav.html");
+            });
+        </script>
+        
+        <script src="/common/js/metronome.js" async defer></script>
+
+        <main class="content">
+            <div class="tempo">
+                <input aria-label="tempo" type="range" name="tempo" id="tempo-slider"
+                min="40" max="220"
+                value="120"
+                step="1">
+                <input type="number" name="tempo" id="tempo-input" value="120">
+            </div>
+
+            <div class="play">
+                <button class="play-button" id="play-button">
+                    <svg viewbox="0 0 100 100" width="100" heigh="100">
+                        <circle fill="black" cx="50" cy="50" r="50"></circle>
+                        <circle fill="white" cx="50" cy="50" r="49"></circle>
+                        <path fill="black"  d="M 20 20 L 80 50 L 80 50 L 20 80 Z"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="options">
+                <button id="options">Options</button>
+            </div>
+
+        </main>
+
+
+    </body>
+</html>

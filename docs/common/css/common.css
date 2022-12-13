@@ -1,0 +1,29 @@
+* {
+    margin: 0;
+}
+
+.content {
+    margin: 0 auto;
+    display: grid;
+    max-width: 20rem;
+    width: 100%;
+}
+
+/* play button */
+
+.play-button {
+    isolation: isolate;
+    position: relative;
+    shape-outside: circle();
+    clip-path: circle();
+    border: none;
+    background: none;
+}
+
+.play-button svg path {
+    transition: 200ms;
+}
+
+.play-button[data-state="playing"] svg path {
+    d: path("M 20 20 L 80 20 L 80 80 L 20 80 Z");
+}
