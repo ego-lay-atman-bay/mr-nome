@@ -14,8 +14,17 @@ class Metronome {
           },
           release: 1,
           onload: () => {
+            let beat = 0;
             Tone.Transport.scheduleRepeat((time) => {
-              this.audio.triggerAttackRelease("C4", "1n", time)
+              
+              // console.log(beat);
+              this.audio.triggerAttackRelease(['C4', 'D4'][this.pattern[beat]], "4n", time);
+              // for (let n = 1; n < this.pattern.length; n++) {
+              //   this.audio.triggerAttackRelease("C4", "4n", time + (n * 0.5));
+
+              // }
+              beat = (beat + 1) % this.pattern.length;
+              
             }, "4n")
           },
         }).toDestination();
