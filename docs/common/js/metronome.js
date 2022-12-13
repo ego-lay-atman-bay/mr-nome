@@ -31,7 +31,7 @@ class Metronome {
     }
 
     playBeat(pitch) {
-        var audio = new Audio('/assets/gock block.mp3');
+        var audio = new Audio('assets/gock block.mp3');
         audio.play();
     }
 }
