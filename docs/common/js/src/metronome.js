@@ -13,6 +13,11 @@ class Metronome {
             "C4": "assets/gock block.mp3",
           },
           release: 1,
+          onload: () => {
+            Tone.Transport.scheduleRepeat((time) => {
+              this.audio.triggerAttackRelease("C4", "1n", time)
+            }, "4n")
+          },
         }).toDestination();
 
         this.loop = new Tone.Loop(time => {
@@ -21,15 +26,14 @@ class Metronome {
 
         Tone.Transport.bpm.value = this.bpm;
 
-        Tone.Transport.scheduleRepeat((time) => {
-          this.audio.triggerAttackRelease("C4", "1n", time)
-        }, "4n")
+        
 
     }
 
     async play() {
         this.playing = true;
         this.offsetTime = 0;
+        await Tone.start();
 
         // this.loop.start(0);
         Tone.Transport.start();
