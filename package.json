@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "tone": "^14.7.77",
+    "watchify": "^4.0.0"
+  },
+  "scripts": {
+    "build": "browserify docs/common/js/src/metronome.js -o docs/common/js/bundled/metronome.js",
+    "watch": "watchify docs/common/js/src/metronome.js -o docs/common/js/bundled/metronome.js --debug --verbose"
+  }
+}

@@ -1,3 +1,5 @@
+var Tone = require('tone')
+
 class Metronome {
     constructor (bpm, pattern, rhythm) {
         this.bpm = bpm || 120;
@@ -5,34 +7,90 @@ class Metronome {
         this.rhythm = rhythm || [1,1,1,1];
         
         this.playing = false;
+        
+        this.audio = new Tone.Sampler({
+          urls: {
+            "C4": "assets/gock block.mp3",
+          },
+          release: 1,
+        }).toDestination();
+
+        this.loop = new Tone.Loop(time => {
+          this.audio.triggerAttackRelease("C4", "8n", time);
+        }, "4n");
+
+        Tone.Transport.bpm.value = this.bpm;
+
+        Tone.Transport.scheduleRepeat((time) => {
+          this.audio.triggerAttackRelease("C4", "1n", time)
+        }, "4n")
+
     }
 
     async play() {
         this.playing = true;
+        this.offsetTime = 0;
 
-        while (this.playing) {
-            console.log('playing');
-            this.playBeat();
-            let result = await this.waitBeat(1);
-            console.log(result)
-        }
+        // this.loop.start(0);
+        Tone.Transport.start();
+        // this.playBeat(0);
+
+
+
+        // while (this.playing) {
+        //     this.playBeat(0)
+        //     let start = new Date().getTime();
+        //     let result = await this.waitBeat(1);
+        //     let end = new Date().getTime();
+        //     console.log(end - start)
+        //     console.log(this.getBeatMilliseconds(1));
+        //     this.offsetTime = Math.max(0, (end - start) - this.getBeatMilliseconds(1));
+        //     console.log(this.offsetTime)
+            // console.log(result);
+
+            // let dif = new Date().getTime() - startTime;
+            // let duration = this.getBeatMilliseconds(1)
+
+            // if ((duration / dif) >= 1) {
+            //   console.log('playing');
+            //   startTime += duration * Math.floor(duration / dif);
+            //   this.playBeat(0)
+            // }
+        // }
+    }
+
+    getBeatMilliseconds(duration, bpm) {
+      duration = duration || 1;
+      bpm = bpm || this.bpm;
+      
+      return (((60 / bpm) * (duration * 1000)))
     }
 
     waitBeat(beat) {
         return new Promise(resolve => {
             setTimeout(() => {
                 resolve('resolved')
-            }, (beat * (60 / this.bpm)) * 1000)
+            }, ((beat * (60 / this.bpm)) * 1000) - this.offsetTime)
         })
     }
 
     stop() {
         this.playing = false;
+        // this.loop.stop();
+        Tone.Transport.stop();
     }
 
     playBeat(pitch) {
-        var audio = new Audio('assets/gock block.mp3');
-        audio.play();
+        this.audio.triggerAttackRelease("C4", 1);;
+        // audio.currentTime = 0;
+        // audio.play();
+
+        // audio.start();
+    }
+
+    setBpm(bpm) {
+      this.bpm = bpm || 120;
+      Tone.Transport.bpm.value = this.bpm;
     }
 }
 
@@ -78,7 +136,7 @@ let tempoSlider = tempoDiv.querySelector('#tempo-slider');
 tempoSlider.addEventListener('input', e => {
     let input = document.querySelector('#tempo-input');
     input.value = tempoSlider.value;
-    met.bpm = parseInt(tempoSlider.value);
+    met.setBpm(parseInt(tempoSlider.value));
 })
 
 var tempoInput = tempoDiv.querySelector('#tempo-input')
@@ -86,7 +144,7 @@ var tempoInput = tempoDiv.querySelector('#tempo-input')
 tempoInput.addEventListener('change', e => {
     let slider = document.querySelector('#tempo-slider');
     slider.value = tempoInput.value;
-    met.bpm = parseInt(tempoInput.value);
+    met.setBpm(parseInt(tempoInput.value));
 })
 
 const buttons = document.querySelectorAll(".play-button");
