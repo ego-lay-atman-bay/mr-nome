@@ -18,7 +18,7 @@ class Metronome {
             Tone.Transport.scheduleRepeat((time) => {
               
               // console.log(beat);
-              this.audio.triggerAttackRelease(['C4', 'D4'][this.pattern[beat]], "4n", time);
+              this.audio.triggerAttackRelease(['C4', 'E4'][this.pattern[beat]], "4n", time);
               // for (let n = 1; n < this.pattern.length; n++) {
               //   this.audio.triggerAttackRelease("C4", "4n", time + (n * 0.5));
 
@@ -29,17 +29,16 @@ class Metronome {
           },
         }).toDestination();
 
-        this.loop = new Tone.Loop(time => {
-          this.audio.triggerAttackRelease("C4", "8n", time);
-        }, "4n");
+        // this.loop = new Tone.Loop(time => {
+        //   this.audio.triggerAttackRelease("C4", "8n", time);
+        // }, "4n").start();
 
         Tone.Transport.bpm.value = this.bpm;
-
-        
 
     }
 
     async play() {
+      await Tone.start();
         this.playing = true;
         this.offsetTime = 0;
         await Tone.start();
