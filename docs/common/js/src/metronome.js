@@ -1,32 +1,33 @@
 var Tone = require('tone')
 
 class Metronome {
-    constructor (bpm, pattern, rhythm) {
+    constructor(bpm, pattern, rhythm) {
         this.bpm = bpm || 120;
-        this.pattern = pattern || [1,0,0,0];
-        this.rhythm = rhythm || [1,1,1,1];
-        
-        this.playing = false;
-        
-        this.audio = new Tone.Sampler({
-          urls: {
-            "C4": "assets/gock block.mp3",
-          },
-          release: 1,
-          onload: () => {
-            let beat = 0;
-            Tone.Transport.scheduleRepeat((time) => {
-              
-              // console.log(beat);
-              this.audio.triggerAttackRelease(['C4', 'E4'][this.pattern[beat]], "4n", time);
-              // for (let n = 1; n < this.pattern.length; n++) {
-              //   this.audio.triggerAttackRelease("C4", "4n", time + (n * 0.5));
+        this.pattern = pattern || [1, 0, 0, 0];
+        this.rhythm = rhythm || [1, 1, 1, 1];
 
-              // }
-              beat = (beat + 1) % this.pattern.length;
-              
-            }, "4n")
-          },
+        this.currentBeat = 0;
+
+        this.playing = false;
+
+        this.audio = new Tone.Sampler({
+            urls: {
+                "C4": "assets/gock block.mp3",
+            },
+            release: 1,
+            onload: () => {
+                Tone.Transport.scheduleRepeat((time) => {
+
+                    // console.log(beat);
+                    this.audio.triggerAttackRelease(['C4', 'E4'][this.pattern[this.currentBeat]], "4n", time);
+                    // for (let n = 1; n < this.pattern.length; n++) {
+                    //   this.audio.triggerAttackRelease("C4", "4n", time + (n * 0.5));
+
+                    // }
+                    this.currentBeat = (this.currentBeat + 1) % this.pattern.length;
+
+                }, "4n")
+            },
         }).toDestination();
 
         // this.loop = new Tone.Loop(time => {
@@ -38,7 +39,8 @@ class Metronome {
     }
 
     async play() {
-      await Tone.start();
+        this.currentBeat = 0;
+        await Tone.start();
         this.playing = true;
         this.offsetTime = 0;
         await Tone.start();
@@ -58,24 +60,24 @@ class Metronome {
         //     console.log(this.getBeatMilliseconds(1));
         //     this.offsetTime = Math.max(0, (end - start) - this.getBeatMilliseconds(1));
         //     console.log(this.offsetTime)
-            // console.log(result);
+        // console.log(result);
 
-            // let dif = new Date().getTime() - startTime;
-            // let duration = this.getBeatMilliseconds(1)
+        // let dif = new Date().getTime() - startTime;
+        // let duration = this.getBeatMilliseconds(1)
 
-            // if ((duration / dif) >= 1) {
-            //   console.log('playing');
-            //   startTime += duration * Math.floor(duration / dif);
-            //   this.playBeat(0)
-            // }
+        // if ((duration / dif) >= 1) {
+        //   console.log('playing');
+        //   startTime += duration * Math.floor(duration / dif);
+        //   this.playBeat(0)
+        // }
         // }
     }
 
     getBeatMilliseconds(duration, bpm) {
-      duration = duration || 1;
-      bpm = bpm || this.bpm;
-      
-      return (((60 / bpm) * (duration * 1000)))
+        duration = duration || 1;
+        bpm = bpm || this.bpm;
+
+        return (((60 / bpm) * (duration * 1000)))
     }
 
     waitBeat(beat) {
@@ -101,8 +103,8 @@ class Metronome {
     }
 
     setBpm(bpm) {
-      this.bpm = bpm || 120;
-      Tone.Transport.bpm.value = this.bpm;
+        this.bpm = bpm || 120;
+        Tone.Transport.bpm.value = this.bpm;
     }
 }
 
@@ -111,24 +113,27 @@ class Metronome {
 function onRangeChange(rangeInputElmt, listener) {
 
     var inputEvtHasNeverFired = true;
-  
-    var rangeValue = {current: undefined, mostRecent: undefined};
-    
+
+    var rangeValue = {
+        current: undefined,
+        mostRecent: undefined
+    };
+
     rangeInputElmt.addEventListener("input", function(evt) {
-      inputEvtHasNeverFired = false;
-      rangeValue.current = evt.target.value;
-      if (rangeValue.current !== rangeValue.mostRecent) {
-        listener(evt);
-      }
-      rangeValue.mostRecent = rangeValue.current;
+        inputEvtHasNeverFired = false;
+        rangeValue.current = evt.target.value;
+        if (rangeValue.current !== rangeValue.mostRecent) {
+            listener(evt);
+        }
+        rangeValue.mostRecent = rangeValue.current;
     });
-  
+
     rangeInputElmt.addEventListener("change", function(evt) {
-      if (inputEvtHasNeverFired) {
-        listener(evt);
-      }
-    }); 
-  
+        if (inputEvtHasNeverFired) {
+            listener(evt);
+        }
+    });
+
 }
 
 
@@ -162,15 +167,15 @@ tempoInput.addEventListener('change', e => {
 const buttons = document.querySelectorAll(".play-button");
 
 buttons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const currentState = button.getAttribute("data-state");
+    button.addEventListener("click", () => {
+        const currentState = button.getAttribute("data-state");
 
-    if (!currentState || currentState === "stopped") {
-      button.setAttribute("data-state", "playing");
-      met.play();
-    } else {
-      button.setAttribute("data-state", "stopped");
-      met.stop();
-    }
-  });
+        if (!currentState || currentState === "stopped") {
+            button.setAttribute("data-state", "playing");
+            met.play();
+        } else {
+            button.setAttribute("data-state", "stopped");
+            met.stop();
+        }
+    });
 });
