@@ -26,7 +26,7 @@ function onRangeChange(rangeInputElmt, listener) {
 
 }
 
-met = new Metronome();
+var metronome = new Metronome();
 
 let tempoDiv = document.querySelector('.tempo');
 
@@ -42,7 +42,7 @@ let tempoSlider = tempoDiv.querySelector('#tempo-slider');
 tempoSlider.addEventListener('input', e => {
     let input = document.querySelector('#tempo-input');
     input.value = tempoSlider.value;
-    met.setBpm(parseInt(tempoSlider.value));
+    metronome.setBpm(parseInt(tempoSlider.value));
 })
 
 var tempoInput = tempoDiv.querySelector('#tempo-input')
@@ -50,7 +50,7 @@ var tempoInput = tempoDiv.querySelector('#tempo-input')
 tempoInput.addEventListener('change', e => {
     let slider = document.querySelector('#tempo-slider');
     slider.value = tempoInput.value;
-    met.setBpm(parseInt(tempoInput.value));
+    metronome.setBpm(parseInt(tempoInput.value));
 })
 
 const buttons = document.querySelectorAll(".play-button");
@@ -61,10 +61,110 @@ buttons.forEach((button) => {
 
         if (!currentState || currentState === "stopped") {
             button.setAttribute("data-state", "playing");
-            met.play();
+            metronome.play();
         } else {
             button.setAttribute("data-state", "stopped");
-            met.stop();
+            metronome.stop();
         }
     });
 });
+
+// options dialog + button
+
+function options () {
+    let optionsDialog = document.getElementById('options-dialog')
+    let optionsButton = document.getElementById('options')
+    let cancelButton = optionsDialog.querySelector('#cancelButton')
+    let confirmButton = optionsDialog.querySelector('#confirmDialog')
+
+    let timeSigEl = optionsDialog.querySelector('.time-signiture')
+    let measure = timeSigEl.querySelector('#mesure')
+    let beatUnit = timeSigEl.querySelector('#beatUnit')
+
+    let timeSig
+
+    optionsDialog.addEventListener('open', e => {
+        console.log('open')
+
+        timeSig = [metronome.timeSig[0],metronome.timeSig[1]]
+        confirmButton.value = [metronome.timeSig[0],metronome.timeSig[1]]
+
+        measure.value = metronome.timeSig[0]
+        beatUnit.value = metronome.timeSig[1]
+    })
+
+    optionsButton.addEventListener('click', e => {
+        optionsDialog.showModal()
+
+        console.log('open')
+
+        timeSig = [metronome.timeSig[0],metronome.timeSig[1]]
+        confirmButton.value = [metronome.timeSig[0],metronome.timeSig[1]]
+
+        measure.value = metronome.timeSig[0]
+        beatUnit.value = metronome.timeSig[1]
+    })
+
+    measure.addEventListener('change', e => {
+        timeSig[0] = parseInt(measure.value)
+        confirmButton.value = timeSig
+    })
+
+    beatUnit.addEventListener('change', e => {
+        timeSig[1] = parseInt(beatUnit.value)
+        confirmButton.value = timeSig
+    })
+
+    cancelButton.addEventListener('click', e => {
+        measure.value = metronome.timeSig[0]
+        beatUnit.value = metronome.timeSig[1]
+        // optionsDialog.close()
+        // timeSig = met.timeSig
+    })
+
+    function submit () {
+        
+        metronome.timeSig = timeSig
+            
+        let pattern = []
+        for (let i = 0; i < timeSig[1]; i++) {
+            if (i == 0) {
+                pattern.push(1)
+            } else {
+                pattern.push(0)
+            }
+        }
+
+        metronome.pattern = pattern
+
+        Tone.Transport.timeSignature = timeSig
+        metronome.makeLoop();
+    }
+
+    optionsDialog.addEventListener('close', e => {
+        if (optionsDialog.returnValue != 'cancel') {
+            submit()
+        }
+    })
+
+    optionsDialog.addEventListener('submit', e => {
+        console.log('submit')
+        if (optionsDialog.returnValue != 'cancel') {
+            submit()
+        }
+    })
+
+    // let submit = (e) => {
+    //     // met.timeSig[0] = measure.value
+    //     // met.timeSig[1] = beatUnit.value
+
+    //     confirmButton.value = timeSig
+    //     met.timeSig = timeSig
+    //     console.log('submit')
+    // }
+
+    // optionsDialog.addEventListener('close', submit)
+    // optionsDialog.addEventListener('submit', submit)
+}
+
+options()

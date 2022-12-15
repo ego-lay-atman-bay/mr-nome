@@ -28,3 +28,25 @@
 .play-button[data-state="playing"] svg path {
     d: path("M 20 20 L 80 20 L 80 80 L 20 80 Z");
 }
+
+/* options dialog */
+
+.options-dialog {
+    margin: auto auto;
+    border: 2px black solid;
+    --gap: 0.5rem;
+}
+
+.options-dialog[open] {
+    display: grid;
+    gap: var(--gap);
+}
+
+.options-dialog form {
+    display: grid;
+    gap: var(--gap);
+}
+
+.options-dialog .time-signiture input {
+    max-width: 4ch;
+}

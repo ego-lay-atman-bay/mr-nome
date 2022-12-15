@@ -27,8 +27,9 @@
                 $("#primary-nav").load("/common/nav/nav.html");
             });
         </script>
+
         
-        <script src="scripts.js" defer></script>
+        <script src="scripts.js" async defer></script>
 
         <main class="content">
             <div class="tempo">
@@ -49,11 +50,33 @@
             </div>
 
             <div class="options">
+                
                 <button id="options">Options</button>
+
+                <dialog id="options-dialog" class="options-dialog">
+                    <h2>Options</h2>
+                    <form method="dialog">
+                        <label for="time-signiture">Time signiture</label>
+                        <div class="time-signiture" id="time-signiture">
+                            <input type="number" name="Measure" id="mesure" value="4" min="1">
+                            <span>/</span>
+                            <input type="number" name="Beat unit" id="beatUnit" value="4" min="1">
+                        </div>
+
+                        <div>
+                            <button id="cancelButton" value="cancel">Cancel</button>
+                            <button id="confirmDialog" value="default">Ok</button>
+                        </div>
+                    </form>
+                </dialog>
+                
+                
             </div>
+
 
         </main>
 
+        
 
     </body>
 </html>

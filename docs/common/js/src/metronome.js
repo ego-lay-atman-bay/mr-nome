@@ -1,10 +1,12 @@
-var Tone = require('tone')
+Tone = require('tone')
 
 Metronome = class Metronome {
     constructor(bpm, pattern, rhythm) {
         this.bpm = bpm || 120;
         this.pattern = pattern || [1, 0, 0, 0];
         this.rhythm = rhythm || [1, 1, 1, 1];
+
+        this.timeSig = [4,4]
 
         this.currentBeat = 0;
 
@@ -16,17 +18,7 @@ Metronome = class Metronome {
             },
             release: 1,
             onload: () => {
-                Tone.Transport.scheduleRepeat((time) => {
-
-                    // console.log(beat);
-                    this.audio.triggerAttackRelease(['C4', 'E4'][this.pattern[this.currentBeat]], "4n", time);
-                    // for (let n = 1; n < this.pattern.length; n++) {
-                    //   this.audio.triggerAttackRelease("C4", "4n", time + (n * 0.5));
-
-                    // }
-                    this.currentBeat = (this.currentBeat + 1) % this.pattern.length;
-
-                }, "4n")
+                this.makeLoop();
             },
         }).toDestination();
 
@@ -38,12 +30,27 @@ Metronome = class Metronome {
 
     }
 
+    makeLoop () {
+        Tone.Transport.clear(this.loop);
+        this.loop = Tone.Transport.scheduleRepeat((time) => {
+            this.currentBeat = Math.min(this.timeSig[1] - 1, this.currentBeat)
+
+            // console.log(beat);
+            this.audio.triggerAttackRelease(['C4', 'E4'][this.pattern[this.currentBeat]], "4n", time);
+            // for (let n = 1; n < this.pattern.length; n++) {
+            //   this.audio.triggerAttackRelease("C4", "4n", time + (n * 0.5));
+
+            // }
+            this.currentBeat = (this.currentBeat + 1) % this.timeSig[1];
+
+        }, this.timeSig[0] + "n")
+    }
+
     async play() {
         this.currentBeat = 0;
         await Tone.start();
         this.playing = true;
         this.offsetTime = 0;
-        await Tone.start();
 
         // this.loop.start(0);
         Tone.Transport.start();
