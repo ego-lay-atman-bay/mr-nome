@@ -43,7 +43,7 @@ Metronome = class Metronome {
             // }
             this.currentBeat = (this.currentBeat + 1) % this.timeSig[1];
 
-        }, this.timeSig[0] + "n")
+        }, this.timeSig[0] + "n", 0)
     }
 
     async play() {

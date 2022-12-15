@@ -26,8 +26,10 @@ function onRangeChange(rangeInputElmt, listener) {
 
 }
 
-var metronome = new Metronome();
 
+function init() {
+    
+    metronome = new Metronome();
 let tempoDiv = document.querySelector('.tempo');
 
 // var tempoSliderChange = (e) => {
@@ -68,6 +70,7 @@ buttons.forEach((button) => {
         }
     });
 });
+}
 
 // options dialog + button
 
@@ -166,5 +169,7 @@ function options () {
     // optionsDialog.addEventListener('close', submit)
     // optionsDialog.addEventListener('submit', submit)
 }
+
+init()
 
 options()
