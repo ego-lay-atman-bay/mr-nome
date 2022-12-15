@@ -24,11 +24,10 @@
         <![endif]-->
         <script>
             $(function () {
-                $("#primary-nav").load("/common/nav/nav.html");
+                $("#primary-nav").load("common/nav/nav.html");
             });
         </script>
 
-        
         <script src="scripts.js" async defer></script>
 
         <main class="content">
@@ -37,7 +36,7 @@
                 min="40" max="220"
                 value="120"
                 step="1">
-                <input type="number" name="tempo" id="tempo-input" value="120">
+                <input type="number" name="tempo" id="tempo-input" value="120" min="1">
             </div>
 
             <div class="play">
