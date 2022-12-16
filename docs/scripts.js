@@ -26,50 +26,65 @@ function onRangeChange(rangeInputElmt, listener) {
 
 }
 
+// globals
+
+function setTempo(bpm) {
+    metronome.setBpm(bpm)
+
+    let slider = document.querySelector('#tempo-slider')
+    slider.value = bpm
+
+    let input = document.querySelector('#tempo-input')
+    input.value = bpm
+}
+
+// init
 
 function init() {
     
     metronome = new Metronome();
-let tempoDiv = document.querySelector('.tempo');
+    let tempoDiv = document.querySelector('.tempo');
 
-// var tempoSliderChange = (e) => {
-//     let input = document.querySelector('#tempo-input')
-//     console.log(input)
-//     input.setAttribute('value', e.target.value)
-// }
+    // var tempoSliderChange = (e) => {
+    //     let input = document.querySelector('#tempo-input')
+    //     console.log(input)
+    //     input.setAttribute('value', e.target.value)
+    // }
 
-// onRangeChange(tempoSlider.querySelector('#tempo-slider'), tempoSliderChange)
+    // onRangeChange(tempoSlider.querySelector('#tempo-slider'), tempoSliderChange)
 
-let tempoSlider = tempoDiv.querySelector('#tempo-slider');
-tempoSlider.addEventListener('input', e => {
-    let input = document.querySelector('#tempo-input');
-    input.value = tempoSlider.value;
-    metronome.setBpm(parseInt(tempoSlider.value));
-})
+    let tempoSlider = tempoDiv.querySelector('#tempo-slider');
+    tempoSlider.addEventListener('input', e => {
+        let input = document.querySelector('#tempo-input');
+        input.value = tempoSlider.value;
+        metronome.setBpm(parseInt(tempoSlider.value));
+    })
 
-var tempoInput = tempoDiv.querySelector('#tempo-input')
+    var tempoInput = tempoDiv.querySelector('#tempo-input')
 
-tempoInput.addEventListener('change', e => {
-    let slider = document.querySelector('#tempo-slider');
-    slider.value = tempoInput.value;
-    metronome.setBpm(parseInt(tempoInput.value));
-})
+    tempoInput.addEventListener('change', e => {
+        let slider = document.querySelector('#tempo-slider');
+        slider.value = tempoInput.value;
+        metronome.setBpm(parseInt(tempoInput.value));
+    })
 
-const buttons = document.querySelectorAll(".play-button");
+    const buttons = document.querySelectorAll(".play-button");
 
-buttons.forEach((button) => {
-    button.addEventListener("click", () => {
-        const currentState = button.getAttribute("data-state");
+    buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const currentState = button.getAttribute("data-state");
 
-        if (!currentState || currentState === "stopped") {
-            button.setAttribute("data-state", "playing");
-            metronome.play();
-        } else {
-            button.setAttribute("data-state", "stopped");
-            metronome.stop();
-        }
+            if (!currentState || currentState === "stopped") {
+                button.setAttribute("data-state", "playing");
+                metronome.play();
+            } else {
+                button.setAttribute("data-state", "stopped");
+                metronome.stop();
+            }
+        });
     });
-});
+
+    
 }
 
 // options dialog + button
@@ -170,6 +185,41 @@ function options () {
     // optionsDialog.addEventListener('submit', submit)
 }
 
-init()
+// tap beat
 
+function tapBeat() {
+    let button = document.querySelector('#tap-beat')
+    let tapTime = 0,
+        curTime,
+        difTime = 0,
+        tempo = 0,
+        taps = 0
+
+    button.addEventListener('click', () => {
+        curTime = new Date().getTime()
+        if (taps == 0) {
+            tapTime = curTime
+        }
+        difTime = curTime - tapTime
+        tapTime = curTime
+        if (difTime > 10000) {
+            taps = 0
+        } else {
+            // console.log(difTime)
+
+            tempo = (1000 / difTime) * 60
+            // console.log(tempo)
+
+            if (tempo && tempo != Infinity) {
+                setTempo(Math.round(tempo))
+            }
+
+            taps += 1
+        }
+
+    })
+}
+
+tapBeat()
+init()
 options()
