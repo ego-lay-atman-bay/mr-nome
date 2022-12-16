@@ -3,7 +3,7 @@
 }
 
 .content {
-    margin: 0 auto;
+    margin: 1rem auto;
     display: grid;
     max-width: 20rem;
     width: 100%;
