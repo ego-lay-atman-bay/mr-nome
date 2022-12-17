@@ -1,3 +1,7 @@
+:root {
+    --measure-width: 150px;
+}
+
 .content {
     max-width: 50rem;
 }
@@ -19,7 +23,7 @@
     flex-wrap: wrap; */
     justify-content: center;
     /* align-content: flex-start; */
-    grid-template-columns: repeat(auto-fill, 150px);
+    grid-template-columns: repeat(auto-fill, var(--measure-width));
 
     margin: 1rem;
 }

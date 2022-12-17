@@ -3,16 +3,34 @@ const {
     Stave,
     StaveNote,
     Voice,
-    Formatter
+    Formatter,
+    Articulation,
+    Dot,
 } = Vex.Flow;
 
-function createMeasure(div, pattern, timeSig = {
+measureWidth = 150
+document.documentElement.style.setProperty('--measure-width', measureWidth + 'px')
+
+function setMeasure(element, pattern, timeSig = {
     num_beats: 4,
     beat_value: 4,
     shown: false
 }, tempo, measure) {
+    function dotted(staveNote, noteIndex = -1) {
+        if (noteIndex < 0) {
+            Dot.buildAndAttach([staveNote], {
+                all: true,
+            });
+        } else {
+            Dot.buildAndAttach([staveNote], {
+                index: noteIndex,
+            });
+        }
+        return staveNote;
+    }
+
     // Create an SVG renderer and attach it to the DIV element with id="output".
-    const renderer = new Renderer(div, Renderer.Backends.SVG);
+    const renderer = new Renderer(element, Renderer.Backends.SVG);
     // renderer.ctx.svg.width.baseVal.value = 101
 
     // Configure the rendering context.
@@ -20,8 +38,8 @@ function createMeasure(div, pattern, timeSig = {
     const context = renderer.getContext();
     context.setFont('Arial', 5);
 
-    // Create a stave of width 400 at position 10, 40.
-    const stave = new Stave(0, 0, 150).setConfigForLines([{
+    // Create a stave
+    const stave = new Stave(0, 0, measureWidth).setConfigForLines([{
         visible: false
     }, {
         visible: false
@@ -41,7 +59,6 @@ function createMeasure(div, pattern, timeSig = {
     }
     if (![null, undefined].includes(tempo)) {
         stave.setTempo(tempo)
-        stave.options.bottom_text_position = 10
     }
     if (measure) {
         stave.setMeasure(measure)
@@ -66,13 +83,23 @@ function createMeasure(div, pattern, timeSig = {
     // // A C-Major chord.
     // new StaveNote({ keys: ["b/4"], duration: "q" }),
 
-    for (const note in pattern) {
-        if (Object.hasOwnProperty.call(pattern, note)) {
-            const duration = pattern[note];
-            notes.push(new StaveNote({
+    for (const index in pattern) {
+        if (Object.hasOwnProperty.call(pattern, index)) {
+            let beat = pattern[index];
+            if (typeof beat == 'string') {
+                beat = [beat]
+            }
+            let note = new StaveNote({
                 keys: ["b/4"],
-                duration: duration
-            }))
+                duration: beat[0]
+            })
+            if (beat[1]) {
+                note.addModifier(new Articulation(beat[1]))
+            }
+            if (beat[0].includes('d')) {
+                dotted(note)
+            }
+            notes.push(note)
         }
     }
     
@@ -88,38 +115,39 @@ function createMeasure(div, pattern, timeSig = {
     voice.addTickables(notes);
 
     // Format and justify the notes to 400 pixels.
-    new Formatter().joinVoices([voice]).format([voice], stave.width - 30);
+    Formatter.FormatAndDraw(context, stave, notes);
+    // new Formatter().joinVoices([voice]).format([voice], stave.width - 30);
     console.log(stave.getWidth())
 
     // Render voice
     voice.draw(context, stave);
 
-    div.style.setProperty('width', (stave.getWidth() + 1) + 'px')
-    div.style.setProperty('height', '100px')
-    div.querySelector('text').setAttribute('x', 0)
+    element.style.setProperty('width', (stave.getWidth() + 1) + 'px')
+    element.style.setProperty('height', '100px')
+    element.querySelector('text').setAttribute('x', 0)
 }
 
-createMeasure(document.getElementById('measure-1'), ['q', 'qr', 'qr', 'q'], {
+setMeasure(document.getElementById('measure-1'), [['8d', 'a>'], '16', 'qr', 'qr', 'q'], {
     num_beats: 4,
     beat_value: 4,
     shown: true
 }, 120, 1)
-createMeasure(document.getElementById('measure-2'), ['q', 'qr', 'qr', 'q', 'q'], {
+setMeasure(document.getElementById('measure-2'), [['q', 'a>'], 'qr', 'qr', 'q', 'q'], {
     num_beats: 5,
     beat_value: 4,
     shown: true
 }, 120, 2)
-createMeasure(document.getElementById('measure-3'), ['q', 'qr', 'qr', 'q', 'q'], {
+setMeasure(document.getElementById('measure-3'), [['q', 'a>'], 'qr', 'qr', 'q', 'q'], {
     num_beats: 5,
     beat_value: 4,
     shown: false
 }, 120, 3)
-createMeasure(document.getElementById('measure-4'), ['q', 'qr', 'qr', 'q', 'q'], {
+setMeasure(document.getElementById('measure-4'), [['q', 'a>'], 'qr', 'qr', 'q', 'q'], {
     num_beats: 5,
     beat_value: 4,
     shown: false
 }, 120, 4)
-createMeasure(document.getElementById('measure-5'), ['q', 'qr', 'qr', 'q', 'q'], {
+setMeasure(document.getElementById('measure-5'), [['16', 'a>'], '8dr', 'qr', 'q', ['q', 'a>']], {
     num_beats: 5,
     beat_value: 4,
     shown: false
