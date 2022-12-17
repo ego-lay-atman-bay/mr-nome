@@ -12,11 +12,11 @@
         <meta name="name" content="Dr. Beat">
         <meta name="keywords" content="metronome, music">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="common/css/common.css">
+        <link rel="stylesheet" href="/dr-beat/common/css/common.css">
         <link rel="stylesheet" href="style.css">
         
-        <script src="common/js/bundled/metronome.js"></script>
         <script src="/assets/jquery-3.6.0.min.js"></script>
+        <script src="../common/js/vexflow-4.0.3.js"></script>
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -31,7 +31,15 @@
 
         <script src="scripts.js" async defer></script>
 
-        <main class="content">
+        <main class="content" id="content">
+            <div class="control-bar" id="control-bar"></div>
+            <div class="track" id="track">
+                <button class="measure" id="measure-1" data-measure="1" data-starting-bpm="120" data-end-bpm="120" data-time-sig="4/4"></button>
+                <button class="measure" id="measure-2" data-measure="1" data-starting-bpm="120" data-end-bpm="120" data-time-sig="4/4"></button>
+                <button class="measure" id="measure-3" data-measure="1" data-starting-bpm="120" data-end-bpm="120" data-time-sig="4/4"></button>
+                <button class="measure" id="measure-4" data-measure="1" data-starting-bpm="120" data-end-bpm="120" data-time-sig="4/4"></button>
+                <button class="measure" id="measure-5" data-measure="1" data-starting-bpm="120" data-end-bpm="120" data-time-sig="4/4"></button>
+            </div>
         </main>
     </body>
 </html>
