@@ -33,7 +33,7 @@ Metronome = class Metronome {
     makeLoop () {
         Tone.Transport.clear(this.loop);
         this.loop = Tone.Transport.scheduleRepeat((time) => {
-            this.currentBeat = Math.min(this.timeSig[1] - 1, this.currentBeat)
+            this.currentBeat = Math.min(this.timeSig[0] - 1, this.currentBeat)
 
             // console.log(beat);
             this.audio.triggerAttackRelease(['C4', 'E4'][this.pattern[this.currentBeat]], "4n", time);
@@ -41,9 +41,9 @@ Metronome = class Metronome {
             //   this.audio.triggerAttackRelease("C4", "4n", time + (n * 0.5));
 
             // }
-            this.currentBeat = (this.currentBeat + 1) % this.timeSig[1];
+            this.currentBeat = (this.currentBeat + 1) % this.timeSig[0];
 
-        }, this.timeSig[0] + "n", 0)
+        }, this.timeSig[1] + "n", 0)
     }
 
     async play() {

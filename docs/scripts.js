@@ -145,7 +145,7 @@ function options () {
         metronome.timeSig = timeSig
             
         let pattern = []
-        for (let i = 0; i < timeSig[1]; i++) {
+        for (let i = 0; i < timeSig[0]; i++) {
             if (i == 0) {
                 pattern.push(1)
             } else {
