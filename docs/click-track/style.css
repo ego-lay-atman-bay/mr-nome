@@ -2,20 +2,12 @@
     --measure-width: 150px;
 }
 
+/* override the default max-width */
 .content {
     max-width: 50rem;
 }
 
-.measure {
-    background: none;
-    border: none;
-    cursor: pointer;
-    overflow: hidden;
-}
-
-.measure:hover {
-    background-color: aqua;
-}
+/* track */
 
 .track {
     display: grid;
@@ -26,4 +18,31 @@
     grid-template-columns: repeat(auto-fill, var(--measure-width));
 
     margin: 1rem;
+}
+
+/* measure styling */
+
+.measure {
+    background: none;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.measure:is(:hover, :focus) {
+    background-color: aqua;
+    outline: none;
+}
+
+.measure.selected {
+    background-color: hsl(190, 80%, 50%);
+}
+
+/* control bar */
+
+.control-bar {
+    display: flex;
+    position: sticky;
+    top: var(--nav-height, 4rem);
+    background: white;
 }

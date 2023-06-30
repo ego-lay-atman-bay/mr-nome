@@ -1,5 +1,6 @@
 * {
     margin: 0;
+    box-sizing: border-box;
 }
 
 .content {
@@ -14,11 +15,12 @@
 .play-button {
     isolation: isolate;
     position: relative;
-    shape-outside: circle();
-    clip-path: circle();
-    border: none;
-    background: none;
+    background: white;
     cursor: pointer;
+
+    border-radius: 900vw;
+    aspect-ratio: 1 / 1;
+    border: 2px solid black;
 }
 
 .play-button svg path {
@@ -31,22 +33,75 @@
 
 /* options dialog */
 
-.options-dialog {
-    margin: auto auto;
-    border: 2px black solid;
-    --gap: 0.5rem;
+/* menus */
+
+.menu {
+    --menu-text-color: black;
+    --menu-bg: white;
+    --menu-hover-bg: hsl(0, 0%, 94%);
+    --menu-active-bg: hsl(0, 0%, 85%);
+    --menu-border-color: hsl(0, 0%, 80%);
+    --menu-border: none;
+    --menu-border-radius: 5px;
+    --menu-button-outline: none;
+    --menu-font-size: 1rem;
+    --menu-padding: 0.2em 0.5em;
+    --menu-button-margin: 0;
+
+    position: relative;
+    margin: var(--menu-button-margin);
 }
 
-.options-dialog[open] {
+.menu .trigger {
+    background: var(--menu-bg);
+    border: var(--menu-border);
+    border-radius: var(--menu-border-radius);
+    outline: var(--menu-button-outline);
+    font-size: var(--menu-font-size);
+
+    padding: var(--menu-padding);
+    /* margin: ; */
+
+    cursor: pointer;
+}
+
+.menu .trigger:is(:hover) {
+    background: var(--menu-hover-bg);
+}
+
+.menu .trigger[data-state="open"],
+.menu .trigger:focus {
+    background: var(--menu-active-bg);
+}
+
+.menu .options {
+    display: none;
+}
+
+.menu .trigger[data-state="open"] + .options {
+    position: absolute;
     display: grid;
-    gap: var(--gap);
+    top: 100%;
+    left: 0;
+
+    background: var(--menu-bg);
+    border: var(--menu-border);
+    border-radius: var(--menu-border-radius);
+    overflow: hidden;
+    padding: 0.2rem 0;
+    margin: 0;
+
+    box-shadow: 0px 0px 2px var(--menu-border-color);
 }
 
-.options-dialog form {
-    display: grid;
-    gap: var(--gap);
+.menu .options .option {
+    background: transparent;
+    border: none;
+    /* border-radius: var(--menu-border-radius); */
+    padding: var(--menu-padding);
+    cursor: pointer;
 }
 
-.options-dialog .time-signiture input {
-    max-width: 4ch;
+.menu .options .option:hover {
+    background-color: var(--menu-hover-bg);
 }

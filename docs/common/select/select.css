@@ -1,0 +1,126 @@
+:root {
+    --select-font: Arial;
+
+    --select-background: white;
+    --select-hover-background: skyblue;
+    --select-selected-background: lightblue;
+    --select-text-color: black;
+    --select-hover-text-color: var(--select-text-color);
+    --select-selected-text-color: var(--select-text-color);
+    
+    --select-border-color: darkgrey;
+    --select-border-width: 0.1em;
+    --select-border-radius: 3px;
+    --select-font-size: 1rem;
+    
+    --select-option-gap: 0;
+    --select-options-border-width: 0.1em;
+
+    --select-options-border-radius: 0.4em;
+
+    --select-options-animation-duration: 40ms;
+}
+
+.select {
+    position: relative;
+    width: fit-content;
+    display: inline-block;
+
+    font-family: var(--select-font);
+    font-size: var(--select-font-size);
+}
+
+.select *:focus {
+    outline: none;
+}
+
+.select .trigger {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    user-select: none;
+
+    background: var(--select-background);
+    border: var(--select-border-color) solid var(--select-border-width);
+    border-radius: var(--select-border-radius);
+
+    padding: 0.1em 0.5em;
+}
+
+.select .trigger:hover {
+    background: var(--select-hover-background);
+    color: var(--select-hover-text-color);
+}
+
+.select .trigger::after {
+    content: "";
+    --triangle-size: 4px;
+    height: var(--triangle-size);
+    margin-left: 0.3em;
+
+    border-top: var(--triangle-size) solid var(--select-text-color);
+    border-left: var(--triangle-size) solid transparent;
+    border-bottom: 0 solid transparent;
+    border-right: var(--triangle-size) solid transparent;
+}
+
+.select .options {
+    display: none;
+    position: absolute;
+    z-index: 999;
+
+    min-width: 100%;
+    width: max-content;
+    top: 100%;
+    left: 0;
+
+    margin: 0;
+    padding: 0;
+
+    flex-direction: column;
+
+    border: var(--select-border-color) solid var(--select-border-width);
+    border-radius: 0 0 var(--select-border-radius) var(--select-border-radius);
+
+    background-color: var(--select-border-color);
+    gap: var(--select-option-gap);
+}
+
+.select:focus-within .trigger {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+
+    background: var(--select-selected-background);
+    color: var(--select-selected-text-color);
+}
+
+.select:focus-within .options {
+    display: flex;
+}
+
+.select .option {
+    font-size: 0.9em;
+
+    border: 0;
+
+    border-color: var(--select-border-color);
+    border-style: solid;
+
+    text-align: left;
+}
+
+.select .option.hidden {
+    display: none;
+}
+
+.select .option.selected {
+    background-color: var(--select-selected-background);
+    color: var(--select-selected-text-color);
+}
+
+.select .option:hover,
+.select .option:focus {
+    background-color: var(--select-hover-background);
+    color: var(--select-hover-text-color);
+}

@@ -1,0 +1,27 @@
+
+
+.options-dialog {
+    border: 2px black solid;
+    --gap: 0.5rem;
+    /* min-height: 5rem;
+    max-height: fit-content; */
+}
+
+.options-dialog[open] {
+    background-color: red;
+    display: grid;
+    /* justify-items: center;
+    align-items: center;
+    align-content: center;
+    justify-content: center; */
+    gap: var(--gap);
+}
+
+.options-dialog form {
+    display: grid;
+    gap: var(--gap);
+}
+
+.options-dialog .time-signiture input {
+    max-width: 4ch;
+}

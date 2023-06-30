@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "gulp": "^4.0.2",
     "tone": "^14.7.77",
     "watchify": "^4.0.0"
   },

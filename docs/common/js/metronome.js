@@ -1,4 +1,4 @@
-Tone = require('tone')
+// Tone = require('tone')
 
 Metronome = class Metronome {
     constructor(bpm, pattern, rhythm) {

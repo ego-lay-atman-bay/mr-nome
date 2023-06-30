@@ -12,11 +12,16 @@
         <meta name="name" content="Dr. Beat">
         <meta name="keywords" content="metronome, music">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="common/dialog-polyfill/dialog-polyfill.css">
         <link rel="stylesheet" href="common/css/common.css">
         <link rel="stylesheet" href="style.css">
         
-        <script src="common/js/bundled/metronome.js"></script>
-        <script src="/assets/jquery-3.6.0.min.js"></script>
+        <script src="common/js/jquery-3.6.0.min.js"></script>
+        <script src="common/js/Tone.js"></script>
+
+        <script type="module" src="common/js/common.js" defer></script>
+        <script src="common/js/metronome.js" async defer></script>
+        </script>
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -25,7 +30,7 @@
         <nav id="primary-nav" class="primary-nav"></nav>
         <script>
             $(function () {
-                $("#primary-nav").load("/dr-beat/common/navbar/navbar.html");
+                $("#primary-nav").load("common/navbar/navbar.html");
             });
         </script>
 
@@ -43,7 +48,7 @@
             <div class="play">
                 <button class="play-button" id="play-button">
                     <svg viewbox="0 0 100 100" width="100" heigh="100">
-                        <circle fill="white" cx="50" cy="50" r="49" stroke="black" stroke-width="1"></circle>
+                        <!-- <circle fill="white" cx="50" cy="50" r="49" stroke="black" stroke-width="1"></circle> -->
                         <path fill="black"  d="M 20 20 L 80 50 L 80 50 L 20 80 Z"></path>
                     </svg>
                 </button>
@@ -53,31 +58,24 @@
             <div class="options">
                 
                 <button id="options">Options</button>
-
-                <dialog id="options-dialog" class="options-dialog">
-                    <h2>Options</h2>
-                    <form method="dialog">
-                        <label for="time-signiture">Time signiture</label>
-                        <div class="time-signiture" id="time-signiture">
-                            <input type="number" name="Measure" id="mesure" value="4" min="1">
-                            <span>/</span>
-                            <input type="number" name="Beat unit" id="beatUnit" value="4" min="1">
-                        </div>
-
-                        <div>
-                            <button id="cancelButton" value="cancel">Cancel</button>
-                            <button id="confirmDialog" value="default">Ok</button>
-                        </div>
-                    </form>
-                </dialog>
-                
-                
             </div>
-
-
         </main>
-
         
+        <dialog id="options-dialog" class="fixed options-dialog">
+            <h2>Options</h2>
+            <form method="dialog">
+                <label for="time-signiture">Time signature</label>
+                <div class="time-signiture" id="time-signiture">
+                    <input type="number" name="Measure" id="mesure" value="4" min="1">
+                    <span>/</span>
+                    <input type="number" name="Beat unit" id="beatUnit" value="4" min="1">
+                </div>
 
+                <div>
+                    <button id="cancelButton" value="cancel">Cancel</button>
+                    <button id="confirmDialog" value="default">Ok</button>
+                </div>
+            </form>
+        </dialog>
     </body>
 </html>
