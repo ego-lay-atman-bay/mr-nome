@@ -23,6 +23,8 @@
 /* measure styling */
 
 .measure {
+    position: relative;
+
     background: none;
     border: none;
     cursor: pointer;
@@ -38,6 +40,39 @@
     background-color: hsl(190, 80%, 50%);
 }
 
+.measure svg {
+    margin-top: -8px;
+}
+
+.measure[data-measure="add"]::after {
+    content: '+';
+    position: absolute;
+
+    opacity: 75%;
+
+    /* display: grid; */
+    /* justify-items: center; */
+    /* align-items: center; */
+    /* justify-content: center; */
+    /* align-content: center; */
+
+    color: black;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background-color: white;
+
+    font-size: 2rem;
+    border-radius: 900vw;
+    aspect-ratio: 1 / 1;
+    border: 1px solid black;
+
+    padding: 12px 22px;
+    /* line-height: 1px; */
+}
+
 /* control bar */
 
 .control-bar {
@@ -45,4 +80,36 @@
     position: sticky;
     top: var(--nav-height, 4rem);
     background: white;
+}
+
+/* measure editor */
+
+#editor-rhythm {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+
+    gap: 0.2em;
+
+    margin-block: 0.5rem;
+}
+
+.measure-editor-note {
+    padding: 0.4rem 0.6rem;
+    user-select: none;
+
+    border: 1.5px solid darkgray;
+
+    border-radius: 4px;
+}
+
+.measure-editor-note[value="0"] {
+    background-color: lightgray;
+}
+
+.measure-editor-note[value="1"] {
+    background-color: lightblue;
+}
+
+.measure-editor-note[value="2"] {
+    background-color: limegreen;
 }

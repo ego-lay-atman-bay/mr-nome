@@ -12,6 +12,8 @@
         <meta name="name" content="Dr. Beat">
         <meta name="keywords" content="metronome, music">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../common/dialog-polyfill/dialog-polyfill.css">
+        
         <link rel="stylesheet" href="../common/css/common.css">
         <link rel="stylesheet" href="style.css">
         
@@ -23,12 +25,14 @@
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <nav id="primary-nav" class="primary-nav"></nav>
-        <script>
-            $(function () {
-                $("#primary-nav").load("../common/navbar/navbar.html");
-            });
-        </script>
+        <link rel="stylesheet" href="../common/navbar/navbar.css">
+        <script src="../common/navbar/navbar.js" async defer></script>
+        <nav id="primary-nav" class="primary-nav">
+            <ul class="nav-links" id="nav-links">
+                <li ontouchstart=""><a tabindex="0.1" href="../index.html" class="hover">Metronome</a></li>
+                <li ontouchstart=""><a tabindex="0.1" href="" class="hover">Click Track</a></li>
+            </ul>
+        </nav>
 
         <script src="scripts.js" defer></script>
 
@@ -51,12 +55,40 @@
                 </div>
             </div>
             <div class="track" id="track">
-                <button class="measure" id="measure-1" data-measure="1" data-starting-bpm="120" data-end-bpm="120" data-time-sig="4/4" data-rhythm="q,qr,qr,q"></button>
-                <button class="measure" id="measure-2" data-measure="2" data-starting-bpm="120" data-end-bpm="120" data-time-sig="5/4" data-rhythm="q,qr,qr,q,q"></button>
-                <button class="measure" id="measure-3" data-measure="3" data-starting-bpm="120" data-end-bpm="120" data-time-sig="5/4" data-rhythm="q,qr,qr,q,q"></button>
-                <button class="measure" id="measure-4" data-measure="4" data-starting-bpm="120" data-end-bpm="120" data-time-sig="5/4" data-rhythm="q,qr,qr,q,q"></button>
-                <button class="measure" id="measure-5" data-measure="5" data-starting-bpm="120" data-end-bpm="120" data-time-sig="5/4" data-rhythm="q,qr,qr,q,q"></button>
+                <button class="measure" id="measure-1" data-measure="1" data-starting-bpm="120" data-end-bpm="120" data-time-signature="4/4" data-rhythm="2,1,0,2"></button>
+                <button class="measure" id="measure-2" data-measure="2" data-starting-bpm="120" data-end-bpm="120" data-time-signature="5/4" data-rhythm="1,0,0,1,1"></button>
+                <button class="measure" id="measure-3" data-measure="3" data-starting-bpm="120" data-end-bpm="120" data-time-signature="5/4" data-rhythm="1,0,2,0,0"></button>
+                <button class="measure" id="measure-4" data-measure="4" data-starting-bpm="120" data-end-bpm="120" data-time-signature="6/8" data-rhythm="1,0,0,1,1,1"></button>
+                <button class="measure" id="measure-5" data-measure="5" data-starting-bpm="120" data-end-bpm="120" data-time-signature="5/4" data-rhythm="1,0,0,1,1"></button>
+                <button class="measure" id="add-measure" data-measure="add"></button>
             </div>
         </main>
+
+        <dialog id="edit-measure">
+            <h2>Edit measure</h2>
+            <div class="editor-tempo-container">
+                <label for="editor-tempo">Tempo</label>
+                <input type="number" name="tempo" id="editor-tempo">
+            </div>
+
+            <div class="editor-time-signature-container">
+                <label for="editor-time-signiture">Time signature</label>
+                <div class="editor-time-signiture" id="editor-time-signature">
+                    <input type="number" name="Measure" id="editor-time-signature-beats-per-measure" value="4" min="1">
+                    <span>/</span>
+                    <input type="number" name="Beat unit" id="editor-time-signature-note-duration" value="4" min="1">
+                </div>
+            </div>
+
+            <div id="editor-rhythm">
+            </div>
+
+            <form method="dialog">
+                <div>
+                    <button id="cancelButton" value="cancel">Cancel</button>
+                    <button id="confirmDialog" value="default">Ok</button>
+                </div>
+            </form>
+        </dialog>
     </body>
 </html>

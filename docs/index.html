@@ -27,12 +27,15 @@
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <nav id="primary-nav" class="primary-nav"></nav>
-        <script>
-            $(function () {
-                $("#primary-nav").load("common/navbar/navbar.html");
-            });
-        </script>
+        
+        <link rel="stylesheet" href="./common/navbar/navbar.css">
+        <script src="./common/navbar/navbar.js" async defer></script>
+        <nav id="primary-nav" class="primary-nav">
+            <ul class="nav-links" id="nav-links">
+                <li ontouchstart=""><a tabindex="0.1" href="" class="hover">Metronome</a></li>
+                <li ontouchstart=""><a tabindex="0.1" href="click-track" class="hover">Click Track</a></li>
+            </ul>
+        </nav>
 
         <script src="scripts.js" async defer></script>
 

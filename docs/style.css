@@ -1,4 +1,25 @@
+/* play button */
 
+.play-button {
+    isolation: isolate;
+    position: relative;
+    background: white;
+    cursor: pointer;
+
+    border-radius: 900vw;
+    aspect-ratio: 1 / 1;
+    border: 2px solid black;
+}
+
+.play-button svg path {
+    transition: 200ms;
+}
+
+.play-button[data-state="playing"] svg path {
+    d: path("M 20 20 L 80 20 L 80 80 L 20 80 Z");
+}
+
+/* options dialog */
 
 .options-dialog {
     border: 2px black solid;
