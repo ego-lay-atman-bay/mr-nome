@@ -22,9 +22,9 @@ function renderMeasure(
     element,
     pattern,
     timeSig = {
-        num_beats: 4,
-        beat_value: 4,
-        shown: false
+        num_beats: null,
+        beat_value: null,
+        shown: null
     },
     tempo,
     measure,
@@ -45,6 +45,45 @@ function renderMeasure(
     for (let index = 0; index < element.children.length; index++) {
         const child = element.children[index];
         element.removeChild(child)
+    }
+    console.log(element)
+
+    if (pattern == null) {
+        pattern = element.getAttribute('data-rhythm').split(',')
+    }
+    if (typeof pattern == 'string') {
+        pattern = pattern.split(',')
+    }
+
+    if (timeSig.num_beats == null) {
+        timeSig.num_beats = parseInt(element.getAttribute('data-time-signature').split('/')[0])
+    }
+    if (timeSig.beat_value == null) {
+        timeSig.beat_value = parseInt(element.getAttribute('data-time-signature').split('/')[1])
+    }
+    if (timeSig.shown == null) {
+        previousMeasure = element.previousElementSibling
+        timeSig.shown = true
+
+        if (previousMeasure) {
+            let previousTimeSignature = previousMeasure.getAttribute('data-time-signature')
+            if (previousTimeSignature == [timeSig.num_beats, timeSig.beat_value].join('/')) {
+                timeSig.shown = false
+            }
+        }
+    }
+
+    console.log('timeSig', timeSig)
+
+    if (tempo == null) {
+        tempo = element.getAttribute('data-starting-bpm')
+    }
+
+    if (measure == null) {
+        measure = element.getAttribute('data-measure')
+        if (measure == 'add') {
+            measure = null
+        }
     }
 
     // Create an SVG renderer and attach it to the DIV element with id="output".
@@ -196,13 +235,6 @@ const measureEditorDialog = document.querySelector('#edit-measure')
 measureEditorDialog.cancelButton = measureEditorDialog.querySelector('#cancelButton')
 measureEditorDialog.confirmButton = measureEditorDialog.querySelector('#confirmDialog')
 
-measureEditorDialog.cancelButton.addEventListener('click', function (e) {
-    this.returnValue = 'cancel'
-})
-measureEditorDialog.confirmButton.addEventListener('click', function (e) {
-    this.returnValue = 'submit'
-})
-
 measureEditorDialog.tempo = measureEditorDialog.querySelector('#editor-tempo')
 measureEditorDialog.timeSignature = {
     beatsPerMeasure: measureEditorDialog.querySelector('#editor-time-signature-beats-per-measure'),
@@ -250,6 +282,12 @@ measureEditorDialog.timeSignature.beatsPerMeasure.addEventListener('input', func
         measureEditorDialog.updateBeats()
     }
 })
+measureEditorDialog.timeSignature.beatsPerMeasure.addEventListener('change', function () {
+    if (this.value == '') {
+        this.value = measureEditorDialog.rhythm.children.length
+    }
+})
+
 measureEditorDialog.timeSignature.noteDuration.addEventListener('input', function () {
     notes = [
         1,
@@ -266,6 +304,11 @@ measureEditorDialog.timeSignature.noteDuration.addEventListener('input', functio
         if (!notes.includes(this.value)) {
             this.value = findClosest(this.value, notes)
         }
+    }
+})
+measureEditorDialog.timeSignature.noteDuration.addEventListener('change', function () {
+    if (this.value == '') {
+        this.value = 4
     }
 })
 
@@ -303,35 +346,101 @@ measureEditorDialog.edit = function (measure) {
     }
 
     this.submit = function () {
-        let timeSignatureText = [
-            this.timeSignature.beatsPerMeasure.value,
-            this.timeSignature.noteDuration.value,
-        ].join('/')
-        let tempo = this.tempo.value
+        let nextMeasure = measure.nextElementSibling
+        let previousMeasure = measure.previousElementSibling
+        
+        let timeSignatureText = ''
+        let tempo = 0
 
-        let rhythm = []
-        for (let index = 0; index < this.rhythm.children.length; index++) {
-            const note = this.rhythm.children[index];
-            rhythm.push(note.value)
+        let showTimeSignature =  true
+        let previous_measure_number = 0
+
+        if (previousMeasure) {
+            if (previousMeasure.getAttribute('data-measure') != 'add') {
+                previous_measure_number = parseInt(previousMeasure.getAttribute('data-measure'))
+                timeSignatureText = previousMeasure.getAttribute('data-time-signature')
+                tempo = previousMeasure.getAttribute('data-starting-bpm')
+            }
+        }
+        
+        if (this.returnValue == 'delete') {
+
+            
+            let parent = measure.parentNode
+
+            measure.remove()
+
+            for (let index = 0; index < parent.children.length; index++) {
+                const child = parent.children[index];
+                console.log('measure', child.getAttribute('data-measure'))
+                if (child.getAttribute('data-measure') != 'add') {
+                    child.setAttribute('data-measure', index + 1)
+                    renderMeasure(child)
+                }
+            }
+        } else {
+            timeSignatureText = [
+                this.timeSignature.beatsPerMeasure.value,
+                this.timeSignature.noteDuration.value,
+            ].join('/')
+            tempo = this.tempo.value
+    
+            rhythm = []
+            for (let index = 0; index < this.rhythm.children.length; index++) {
+                const note = this.rhythm.children[index];
+                rhythm.push(note.value)
+            }
+    
+            rhythmText = rhythm.join(',')
+            
+            measure.setAttribute('data-measure', previous_measure_number + 1)
+            measure.setAttribute('data-starting-bpm', tempo)
+            measure.setAttribute('data-time-signature', timeSignatureText)
+            measure.setAttribute('data-rhythm', rhythmText)
+
+            if (previousMeasure) {
+                if (previousMeasure.getAttribute('data-time-signature') == timeSignatureText) {
+                    showTimeSignature = false
+                }
+            }
+
+            renderMeasure(
+                measure,
+                rhythm,
+                {
+                    num_beats: this.timeSignature.beatsPerMeasure.value,
+                    beat_value: this.timeSignature.noteDuration.value,
+                    shown: showTimeSignature,
+                },
+                tempo,
+                measure.getAttribute('data-measure')
+            )
         }
 
-        rhythmText = rhythm.join(',')
+        console.log('previous', previousMeasure)
 
-        measure.setAttribute('data-starting-bpm', tempo)
-        measure.setAttribute('data-time-signature', timeSignatureText)
-        measure.setAttribute('data-rhythm', rhythmText)
+        if (nextMeasure) {
+            if (nextMeasure.getAttribute('data-measure') != 'add') {
+                console.log(nextMeasure.getAttribute('data-time-signature').split('/'))
 
-        renderMeasure(
-            measure,
-            rhythm,
-            {
-                num_beats: this.timeSignature.beatsPerMeasure.value,
-                beat_value: this.timeSignature.noteDuration.value,
-                shown: true,
-            },
-            tempo,
-            measure.getAttribute('data-measure')
-        )
+                let timeSignatureShown = nextMeasure.getAttribute('data-time-signature') != timeSignatureText
+
+                
+                renderMeasure(
+                    nextMeasure,
+                    nextMeasure.getAttribute('data-rhythm').split(','),
+                    {
+                        num_beats: nextMeasure.getAttribute('data-time-signature').split('/')[0],
+                        beat_value: nextMeasure.getAttribute('data-time-signature').split('/')[1],
+                        shown: timeSignatureShown,
+                    },
+                    nextMeasure.getAttribute('data-starting-bpm'),
+                    nextMeasure.getAttribute('data-measure'),
+                )
+            
+            }
+        }
+
     }
 
     this.showModal()
@@ -340,6 +449,34 @@ measureEditorDialog.edit = function (measure) {
 function editMeasure(measure) {
     measureEditorDialog.edit(measure)
 }
+
+function addMeasure(adder) {
+    let previousMeasure = adder.previousElementSibling
+    let rhythm = '1,1,1,1'
+    let tempo = 120
+    let timeSignature = '4/4'
+    if (previousMeasure) {
+        rhythm = previousMeasure.getAttribute('data-rhythm')
+        tempo = previousMeasure.getAttribute('data-starting-bpm')
+        timeSignature = previousMeasure.getAttribute('data-time-signature')
+    }
+    
+    let newMeasure = document.createElement('button')
+    newMeasure.classList.add('measure')
+    newMeasure.setAttribute('data-rhythm', rhythm)
+    newMeasure.setAttribute('data-starting-bpm', tempo)
+    newMeasure.setAttribute('data-ending-bpm', tempo)
+    newMeasure.setAttribute('data-time-signature', timeSignature)
+
+    adder.parentNode.insertBefore(newMeasure, adder)
+
+    newMeasure.addEventListener('click', () => {
+        editMeasure(newMeasure)
+    })
+
+    measureEditorDialog.edit(newMeasure)
+
+} 
 
 function render() {
     let measures = document.querySelectorAll('.measure')
@@ -360,6 +497,10 @@ function render() {
                 null,
                 null,
             )
+
+            measure.addEventListener('click', function (e) {
+                addMeasure(this)
+            })
         } else {
 
             let time_signature = measure.getAttribute('data-time-signature')
@@ -373,15 +514,7 @@ function render() {
 
 
             renderMeasure(
-                measure,
-                rhythm,
-                {
-                    num_beats: num_beats,
-                    beat_value: beat_value,
-                    shown: time_signature != last_time_signature
-                },
-                tempo,
-                measure_number,
+                measure
             )
 
             last_time_signature = time_signature

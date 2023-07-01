@@ -10,12 +10,10 @@
 /* track */
 
 .track {
-    display: grid;
-    /* flex-direction: row;
-    flex-wrap: wrap; */
-    justify-content: center;
-    /* align-content: flex-start; */
-    grid-template-columns: repeat(auto-fill, var(--measure-width));
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
 
     margin: 1rem;
 }
