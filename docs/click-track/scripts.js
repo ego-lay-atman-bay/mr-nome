@@ -316,12 +316,10 @@ measureEditorDialog.submit = function () {}
 
 measureEditorDialog.addEventListener('close', function (e) {
     console.log(this.returnValue)
-    if (this.returnValue != 'cancel') {
-        this.submit()
-    }
+    this.submit()
 })
 
-measureEditorDialog.edit = function (measure) {
+measureEditorDialog.edit = function (measure, adding = false) {
     let timeSignatureText = measure.getAttribute('data-time-signature')
     let tempo = measure.getAttribute('data-starting-bpm')
 
@@ -346,6 +344,13 @@ measureEditorDialog.edit = function (measure) {
     }
 
     this.submit = function () {
+        if (this.returnValue == 'cancel') {
+            if (adding) {
+                measure.remove()
+            }
+            return
+        }
+        
         let nextMeasure = measure.nextElementSibling
         let previousMeasure = measure.previousElementSibling
         
@@ -364,8 +369,6 @@ measureEditorDialog.edit = function (measure) {
         }
         
         if (this.returnValue == 'delete') {
-
-            
             let parent = measure.parentNode
 
             measure.remove()
@@ -393,7 +396,7 @@ measureEditorDialog.edit = function (measure) {
     
             rhythmText = rhythm.join(',')
             
-            measure.setAttribute('data-measure', previous_measure_number + 1)
+            measure.setAttribute('data-measure', parseInt(previous_measure_number) + 1)
             measure.setAttribute('data-starting-bpm', tempo)
             measure.setAttribute('data-time-signature', timeSignatureText)
             measure.setAttribute('data-rhythm', rhythmText)
@@ -474,7 +477,7 @@ function addMeasure(adder) {
         editMeasure(newMeasure)
     })
 
-    measureEditorDialog.edit(newMeasure)
+    measureEditorDialog.edit(newMeasure, true)
 
 } 
 
