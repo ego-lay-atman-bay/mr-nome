@@ -231,6 +231,23 @@ function renderMeasure(
     }
 }
 
+function modeCheck() {
+    let elements = document.querySelectorAll('input[name="mode-selector"]')
+
+    let mode = 'edit'
+
+    for (const index in elements) {
+        if (Object.hasOwnProperty.call(elements, index)) {
+            const element = elements[index];
+            if (element.checked) {
+                mode = element.value
+                return mode
+            }
+        }
+    }
+    return mode
+}
+
 const measureEditorDialog = document.querySelector('#edit-measure')
 measureEditorDialog.cancelButton = measureEditorDialog.querySelector('#cancelButton')
 measureEditorDialog.confirmButton = measureEditorDialog.querySelector('#confirmDialog')
@@ -453,6 +470,22 @@ function editMeasure(measure) {
     measureEditorDialog.edit(measure)
 }
 
+function measureClickHandler(e, measure) {
+    let mode = modeCheck()
+
+    if (mode == 'edit') {
+        editMeasure(measure)
+    } else if (mode == 'select') {
+        let selected = document.querySelectorAll('.measure.selected')
+        selected.forEach(element => {
+            element.classList.remove('selected')
+        });
+
+        measure.classList.add('selected')
+    }
+
+}
+
 function addMeasure(adder) {
     let previousMeasure = adder.previousElementSibling
     let rhythm = '1,1,1,1'
@@ -473,15 +506,15 @@ function addMeasure(adder) {
 
     adder.parentNode.insertBefore(newMeasure, adder)
 
-    newMeasure.addEventListener('click', () => {
-        editMeasure(newMeasure)
+    newMeasure.addEventListener('click', (e) => {
+        measureClickHandler(e, newMeasure)
     })
 
     measureEditorDialog.edit(newMeasure, true)
 
 } 
 
-function render() {
+function updateMeasures() {
     let measures = document.querySelectorAll('.measure')
     let last_time_signature = ''
     measures.forEach(measure => {
@@ -522,11 +555,11 @@ function render() {
 
             last_time_signature = time_signature
 
-            measure.addEventListener('click', () => {
-                editMeasure(measure)
+            measure.addEventListener('click', (e) => {
+                measureClickHandler(e, measure)
             })
         }
     });
 }
 
-render()
+updateMeasures()

@@ -1,6 +1,14 @@
 * {
     margin: 0;
+    padding: 0;
     box-sizing: border-box;
+}
+
+:root {
+    --toggle-color: transparent;
+    --toggle-hover-color: lightgray;
+    --toggle-selected-color: aqua;
+    --toggle-selected-hover-color: lightblue;
 }
 
 .content {
@@ -81,4 +89,13 @@
 
 .menu .options .option:hover {
     background-color: var(--menu-hover-bg);
+}
+
+.toggle {
+    cursor: pointer;
+    background-color: var(--toggle-color);
+}
+
+.toggle:hover {
+    background-color: var(--toggle-hover-color);
 }

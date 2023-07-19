@@ -1,22 +1,45 @@
 /* play button */
 
 .play-button {
+    --size: 4rem;
     isolation: isolate;
     position: relative;
     background: white;
     cursor: pointer;
+    height: calc(var(--size) * 1.5);
 
     border-radius: 900vw;
     aspect-ratio: 1 / 1;
     border: 2px solid black;
 }
 
-.play-button svg path {
-    transition: 200ms;
+.play-button::after {
+    content: "";
+    border: 0;
+    background: transparent;
+    width: 0;
+    display: block;
+    margin-inline: auto;
+    
+    height: 0;
+  
+    border-color: transparent transparent transparent #202020;
+    transition: 250ms border ease,
+                250ms height ease;
+    /* cursor: pointer; */
+    
+    border-style: solid;
+    border-width: calc(var(--size) / 2) 0 calc(var(--size) / 2) calc(var(--size) * 0.8);
 }
 
-.play-button[data-state="playing"] svg path {
-    d: path("M 20 20 L 80 20 L 80 80 L 20 80 Z");
+.play-button:hover::after {
+    border-color: transparent transparent transparent #404040;
+}
+
+.play-button[data-state="playing"]::after {
+    height: var(--size);
+    border-style: double;
+    border-width: 0px 0 0px calc(var(--size) * 0.81);
 }
 
 /* options dialog */
@@ -29,7 +52,7 @@
 }
 
 .options-dialog[open] {
-    background-color: red;
+    /* background-color: red; */
     display: grid;
     /* justify-items: center;
     align-items: center;

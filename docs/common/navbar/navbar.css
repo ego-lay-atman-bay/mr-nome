@@ -17,12 +17,6 @@
     scroll-margin: var(--navbar-height);
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 .primary-nav {
     position: sticky;
     top: 0;
@@ -46,6 +40,8 @@
 
     box-shadow:  0px 0px 10px var(--nav-color);
     min-height: var(--nav-height);
+
+    z-index: 999;
 }
 
 .primary-nav .logo {
