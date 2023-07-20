@@ -62,16 +62,19 @@
                 </div>
                 <div id="player-controls">
                     <button class="play-button"></button>
-                    <input type="checkbox" name="player-count-in" id="player-count-in">
+                    <input type="checkbox" name="player-controls" id="player-count-in">
                     <label class="toggle" for="player-count-in">Count in</label>
+                    <label for="player-speed">Speed:</label>
+                    <input type="range" name="player-controls" id="player-speed">
+                    <input type="number" name="player-controls" id="player-speed-input">
                 </div>
             </menu>
             <div class="track" id="track">
-                <button class="measure" id="measure-1" data-measure="1" data-starting-bpm="120" data-end-bpm="120" data-time-signature="4/4" data-rhythm="2,1,0,2"></button>
-                <button class="measure" id="measure-2" data-measure="2" data-starting-bpm="120" data-end-bpm="120" data-time-signature="5/4" data-rhythm="1,0,0,1,1"></button>
-                <button class="measure" id="measure-3" data-measure="3" data-starting-bpm="120" data-end-bpm="120" data-time-signature="5/4" data-rhythm="1,0,2,0,0"></button>
-                <button class="measure" id="measure-4" data-measure="4" data-starting-bpm="120" data-end-bpm="120" data-time-signature="6/8" data-rhythm="1,0,0,1,1,1"></button>
-                <button class="measure" id="measure-5" data-measure="5" data-starting-bpm="120" data-end-bpm="120" data-time-signature="5/4" data-rhythm="1,0,0,1,1"></button>
+                <button class="measure" id="measure-1" data-measure="1" data-starting-bpm="120" data-ending-bpm="120" data-time-signature="4/4" data-rhythm="2,1,0,2"></button>
+                <button class="measure" id="measure-2" data-measure="2" data-starting-bpm="120" data-ending-bpm="120" data-time-signature="5/4" data-rhythm="1,0,0,1,1"></button>
+                <button class="measure" id="measure-3" data-measure="3" data-starting-bpm="120" data-ending-bpm="120" data-time-signature="5/4" data-rhythm="1,0,2,0,0"></button>
+                <button class="measure" id="measure-4" data-measure="4" data-starting-bpm="120" data-ending-bpm="120" data-time-signature="6/8" data-rhythm="1,0,0,1,1,1"></button>
+                <button class="measure" id="measure-5" data-measure="5" data-starting-bpm="120" data-ending-bpm="120" data-time-signature="5/4" data-rhythm="1,0,0,1,1"></button>
                 <button class="measure" id="add-measure" data-measure="add"></button>
             </div>
         </main>
@@ -79,8 +82,10 @@
         <dialog id="edit-measure" class="fixed">
             <h2>Edit measure</h2>
             <div class="editor-tempo-container">
-                <label for="editor-tempo">Tempo</label>
-                <input type="number" name="tempo" id="editor-tempo">
+                <label for="editor-start-tempo">Start tempo</label>
+                <input type="number" name="tempo" id="editor-start-tempo">
+                <label for="editor-end-tempo">End tempo</label>
+                <input type="number" name="tempo" id="editor-end-tempo">
             </div>
 
             <div class="editor-time-signature-container">

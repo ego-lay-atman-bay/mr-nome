@@ -7,6 +7,7 @@ const {
     Articulation,
     Dot,
     Tuplet,
+    StaveTempo,
 } = Vex.Flow;
 
 measureWidth = 150
@@ -26,7 +27,14 @@ function renderMeasure(
         beat_value: null,
         shown: null
     },
-    tempo,
+    tempo = {
+        starting: null,
+        ending: null,
+        show_starting: null,
+        show_ending: null,
+        show_rit: null,
+        show_acc: null,
+    },
     measure,
 ) {
     function dotted(staveNote, noteIndex = -1) {
@@ -75,8 +83,29 @@ function renderMeasure(
 
     console.log('timeSig', timeSig)
 
-    if (tempo == null) {
-        tempo = element.getAttribute('data-starting-bpm')
+    if (tempo.starting == null) {
+        tempo.starting = element.getAttribute('data-starting-bpm')
+    }
+    if (tempo.ending == null) {
+        tempo.ending = element.getAttribute('data-ending-bpm')
+    }
+    if (tempo.show_rit == null && !tempo.show_acc) {
+        if (tempo.starting < tempo.ending) {
+            tempo.show_rit = true
+        }
+    }
+    if (tempo.show_acc == null && !tempo.show_rit) {
+        if (tempo.starting > tempo.ending) {
+            tempo.show_acc = true
+        }
+    }
+    if (tempo.show_starting == null) {
+        tempo.show_starting = true
+
+        if (previousMeasure) {
+            let previousEndingTempo = previousMeasure.getAttribute('data-ending-tempo')
+            tempo.show_starting = (parseFloat(previousEndingTempo) == parseFloat(tempo.starting))
+        }
     }
 
     if (measure == null) {
@@ -218,10 +247,20 @@ function renderMeasure(
     console.log(stave.getWidth())
 
     // Render voice
-    voice.draw(context, stave);
+    // voice.draw(context, stave);
 
     if (tuplet) {
         tuplet.setContext(context).draw()
+    }
+
+    if (tempo.show_starting && tempo.starting != null) {
+        console.log('measure', measure, tempo.starting)
+        let starting_tempo = new StaveTempo(tempo.starting)
+        starting_tempo.setTempo({
+            bpm: tempo.starting,
+            
+        })
+        starting_tempo.setContext(context).draw(stave)
     }
 
     element.style.setProperty('width', (stave.getWidth() + 1) + 'px')
@@ -252,7 +291,9 @@ const measureEditorDialog = document.querySelector('#edit-measure')
 measureEditorDialog.cancelButton = measureEditorDialog.querySelector('#cancelButton')
 measureEditorDialog.confirmButton = measureEditorDialog.querySelector('#confirmDialog')
 
-measureEditorDialog.tempo = measureEditorDialog.querySelector('#editor-tempo')
+measureEditorDialog.startTempo = measureEditorDialog.querySelector('#editor-start-tempo')
+measureEditorDialog.endTempo = measureEditorDialog.querySelector('#editor-end-tempo')
+
 measureEditorDialog.timeSignature = {
     beatsPerMeasure: measureEditorDialog.querySelector('#editor-time-signature-beats-per-measure'),
     noteDuration: measureEditorDialog.querySelector('#editor-time-signature-note-duration'),
@@ -338,7 +379,8 @@ measureEditorDialog.addEventListener('close', function (e) {
 
 measureEditorDialog.edit = function (measure, adding = false) {
     let timeSignatureText = measure.getAttribute('data-time-signature')
-    let tempo = measure.getAttribute('data-starting-bpm')
+    let startTempo = measure.getAttribute('data-starting-bpm')
+    let endTempo = measure.getAttribute('data-ending-bpm')
 
     let timeSignature = timeSignatureText.split('/')
 
@@ -346,7 +388,8 @@ measureEditorDialog.edit = function (measure, adding = false) {
 
     this.timeSignature.beatsPerMeasure.value = timeSignature[0]
     this.timeSignature.noteDuration.value = timeSignature[1]
-    this.tempo.value = tempo
+    this.startTempo.value = startTempo
+    this.endTempo.value = endTempo
 
     this.updateBeats()
 
@@ -403,7 +446,7 @@ measureEditorDialog.edit = function (measure, adding = false) {
                 this.timeSignature.beatsPerMeasure.value,
                 this.timeSignature.noteDuration.value,
             ].join('/')
-            tempo = this.tempo.value
+            tempo = this.startTempo.value
     
             rhythm = []
             for (let index = 0; index < this.rhythm.children.length; index++) {
@@ -530,7 +573,14 @@ function updateMeasures() {
                     beat_value: 1,
                     shown: false,
                 },
-                null,
+                {
+                    starting: null,
+                    ending: null,
+                    show_starting: false,
+                    show_ending: false,
+                    show_rit: false,
+                    show_acc: false,
+                },
                 null,
             )
 
