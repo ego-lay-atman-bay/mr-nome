@@ -7,9 +7,9 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Click Track Maker - Dr. Beat</title>
+        <title>Click Track Maker - Mr. Nome</title>
         <meta name="description" content="(soon to be) Advanced online metronome.">
-        <meta name="name" content="Dr. Beat">
+        <meta name="name" content="Mr. Nome">
         <meta name="keywords" content="metronome, music">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="../common/dialog-polyfill/dialog-polyfill.css">
@@ -18,7 +18,7 @@
         <link rel="stylesheet" href="style.css">
         
         <script src="../common/js/jquery-3.6.0.min.js"></script>
-        <script src="../common/js/vexflow-4.1.0.js"></script>
+        <script src="../common/js/vexflow-4.2.2.js"></script>
         <script type="module" src="../common/js/common.js" defer></script>
     </head>
     <body>
@@ -63,18 +63,59 @@
                 <div id="player-controls">
                     <button class="play-button"></button>
                     <input type="checkbox" name="player-controls" id="player-count-in">
-                    <label class="toggle" for="player-count-in">Count in</label>
+                    <label class="toggle" for="player-count-off">Count off</label>
                     <label for="player-speed">Speed:</label>
                     <input type="range" name="player-controls" id="player-speed">
                     <input type="number" name="player-controls" id="player-speed-input">
                 </div>
             </menu>
             <div class="track" id="track">
-                <button class="measure" id="measure-1" data-measure="1" data-starting-bpm="120" data-ending-bpm="120" data-time-signature="4/4" data-rhythm="2,1,0,2"></button>
-                <button class="measure" id="measure-2" data-measure="2" data-starting-bpm="120" data-ending-bpm="120" data-time-signature="5/4" data-rhythm="1,0,0,1,1"></button>
-                <button class="measure" id="measure-3" data-measure="3" data-starting-bpm="120" data-ending-bpm="120" data-time-signature="5/4" data-rhythm="1,0,2,0,0"></button>
-                <button class="measure" id="measure-4" data-measure="4" data-starting-bpm="120" data-ending-bpm="120" data-time-signature="6/8" data-rhythm="1,0,0,1,1,1"></button>
-                <button class="measure" id="measure-5" data-measure="5" data-starting-bpm="120" data-ending-bpm="120" data-time-signature="5/4" data-rhythm="1,0,0,1,1"></button>
+                <button class="measure" id="measure-1"
+                    data-measure="1"
+                    data-starting-bpm="120"
+                    data-ending-bpm=""
+                    data-tempo-measure-span="1"
+                    data-time-signature="4/4"
+                    data-rhythm="2,1,0,2"
+                ></button>
+
+                <button class="measure" id="measure-2"
+                    data-measure="2"
+                    data-starting-bpm=""
+                    data-ending-bpm=""
+                    data-tempo-measure-span="2"
+                    data-time-signature="5/4"
+                    data-rhythm="1,0,0,1,1"
+                ></button>
+
+                <button class="measure" id="measure-3"
+                    data-measure="3"
+                    data-starting-bpm=""
+                    data-ending-bpm="100"
+                    data-tempo-measure-span="1"
+                    data-time-signature="5/4"
+                    data-rhythm="1,0,2,0,0"
+                ></button>
+
+                <button class="measure" id="measure-4"
+                    data-measure="4"
+                    data-starting-bpm="120"
+                    data-ending-bpm="100"
+                    data-tempo-measure-span="1"
+                    data-time-signature="6/8"
+                    data-rhythm="1,0,0,1,1,1"
+                ></button>
+
+                <button class="measure" id="measure-5"
+                    data-measure="5"
+                    data-starting-bpm="120"
+                    data-ending-bpm=""
+                    data-tempo-measure-span="1"
+                    data-time-signature="5/4"
+                    data-rhythm="1,0,0,1,1"
+                ></button>
+
+
                 <button class="measure" id="add-measure" data-measure="add"></button>
             </div>
         </main>

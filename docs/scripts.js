@@ -1,6 +1,6 @@
-// code by Andrew Willems https://stackoverflow.com/a/37623959/17129659
 
 function onRangeChange(rangeInputElmt, listener) {
+    // code by Andrew Willems https://stackoverflow.com/a/37623959/17129659
 
     var inputEvtHasNeverFired = true;
 
