@@ -41,8 +41,10 @@ function setTempo(bpm) {
 // init
 
 function init() {
+    const button = document.querySelector("#play-button");
+    const audioPlayer = document.getElementById(button.getAttribute('aria-controls'))
     
-    metronome = new Metronome();
+    metronome = new Metronome(null, null, null, button);
     let tempoDiv = document.querySelector('.tempo');
 
     // var tempoSliderChange = (e) => {
@@ -67,24 +69,6 @@ function init() {
         slider.value = tempoInput.value;
         metronome.setBpm(parseInt(tempoInput.value));
     })
-
-    const buttons = document.querySelectorAll(".play-button");
-
-    buttons.forEach((button) => {
-        button.addEventListener("click", () => {
-            const currentState = button.getAttribute("data-state");
-
-            if (!currentState || currentState === "stopped") {
-                button.setAttribute("data-state", "playing");
-                metronome.play();
-            } else {
-                button.setAttribute("data-state", "stopped");
-                metronome.stop();
-            }
-        });
-    });
-
-    
 }
 
 // options dialog + button

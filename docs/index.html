@@ -49,14 +49,16 @@
             </div>
 
             <div class="play">
-                <button class="play-button" id="play-button"></button>
+                <button class="play-button" id="play-button" aria-controls="play-button-audio"></button>
+                <audio src="https://raw.githubusercontent.com/anars/blank-audio/master/10-seconds-of-silence.mp3" loop id="play-button-audio"></audio>
             </div>
             <button id="tap-beat" class="tap-beat">Tap</button>
 
             <div class="options">
-                
                 <button id="options">Options</button>
             </div>
+
+            <span id="log"></span>
         </main>
         
         <dialog id="options-dialog" class="fixed options-dialog">

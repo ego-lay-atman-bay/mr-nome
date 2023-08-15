@@ -11,6 +11,8 @@
     border-radius: 900vw;
     aspect-ratio: 1 / 1;
     border: 2px solid black;
+
+    display: block !important;
 }
 
 .play-button::after {

@@ -1,16 +1,32 @@
 // Tone = require('tone')
 
 Metronome = class Metronome {
-    constructor(bpm, pattern, rhythm) {
+    constructor(bpm, pattern, rhythm, audioButton) {
         this.bpm = bpm || 120;
         this.pattern = pattern || [1, 0, 0, 0];
         this.rhythm = rhythm || [1, 1, 1, 1];
 
-        this.timeSig = [4,4]
+        this.timeSig = [4, 4]
 
         this.currentBeat = 0;
 
         this.playing = false;
+
+        this.audioButton = audioButton
+
+        let audioTag = null
+
+        if (this.audioButton) {
+            audioTag = document.getElementById(this.audioButton.getAttribute('aria-controls'))
+        }
+
+        console.log(audioTag)
+
+        if (audioTag) {
+            this.audioTag = audioTag
+        } else {
+            this.setUpMediaAudio()
+        }
 
         this.audio = new Tone.Sampler({
             urls: {
@@ -28,9 +44,36 @@ Metronome = class Metronome {
 
         Tone.Transport.bpm.value = this.bpm;
 
+
+        
+        this.audioButton.addEventListener("click", () => {
+            console.log('audioButton click')
+            const currentState = this.audioButton.getAttribute("data-state");
+
+            if (!currentState || currentState === "stopped") {
+                this.play().then(() => {
+                    this.setupMediaSession()
+                })
+            } else {
+                this.stop();
+            }
+        });
+
+        this.audioTag.addEventListener('pause', () => {
+            console.log('audioTag pause')
+            if (this.playing) {
+                this.stop()
+            }
+        })
+        this.audioTag.addEventListener('play', () => {
+            console.log('audioTag play')
+            if (!this.playing) {
+                this.play()
+            }
+        })
     }
 
-    makeLoop () {
+    makeLoop() {
         Tone.Transport.clear(this.loop);
         this.loop = Tone.Transport.scheduleRepeat((time) => {
             this.currentBeat = Math.min(this.timeSig[0] - 1, this.currentBeat)
@@ -47,37 +90,29 @@ Metronome = class Metronome {
     }
 
     async play() {
+        this.audioButton.setAttribute("data-state", "playing");
         this.currentBeat = 0;
         await Tone.start();
         this.playing = true;
+        if (this.audioTag && this.audioTag.paused) {
+            this.audioTag.play()
+        }
+        // navigator.mediaSession.playbackState = 'playing'
         this.offsetTime = 0;
 
         // this.loop.start(0);
         Tone.Transport.start();
-        // this.playBeat(0);
+    }
 
-
-
-        // while (this.playing) {
-        //     this.playBeat(0)
-        //     let start = new Date().getTime();
-        //     let result = await this.waitBeat(1);
-        //     let end = new Date().getTime();
-        //     console.log(end - start)
-        //     console.log(this.getBeatMilliseconds(1));
-        //     this.offsetTime = Math.max(0, (end - start) - this.getBeatMilliseconds(1));
-        //     console.log(this.offsetTime)
-        // console.log(result);
-
-        // let dif = new Date().getTime() - startTime;
-        // let duration = this.getBeatMilliseconds(1)
-
-        // if ((duration / dif) >= 1) {
-        //   console.log('playing');
-        //   startTime += duration * Math.floor(duration / dif);
-        //   this.playBeat(0)
-        // }
-        // }
+    stop() {
+        this.audioButton.setAttribute("data-state", "stopped");
+        this.playing = false;
+        if (this.audioTag && !this.audioTag.paused) {
+            this.audioTag.pause()
+        }
+        // navigator.mediaSession.playbackState = 'paused'
+        // this.loop.stop();
+        Tone.Transport.stop();
     }
 
     getBeatMilliseconds(duration, bpm) {
@@ -95,11 +130,6 @@ Metronome = class Metronome {
         })
     }
 
-    stop() {
-        this.playing = false;
-        // this.loop.stop();
-        Tone.Transport.stop();
-    }
 
     playBeat(pitch) {
         this.audio.triggerAttackRelease("C4", 1);;
@@ -112,5 +142,60 @@ Metronome = class Metronome {
     setBpm(bpm) {
         this.bpm = bpm || 120;
         Tone.Transport.bpm.value = this.bpm;
+        this.getArtist()
+    }
+
+    getArtist() {
+        let artist = `tempo: ${this.bpm}`
+        navigator.mediaSession.metadata.artist = artist
+        return artist
+    }
+
+    setupMediaSession() {
+        this.setUpMediaAudio()
+        console.log('mediaSession', "mediaSession" in navigator)
+        if ("mediaSession" in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+                title: "Mr. Nome",
+            });
+            this.getArtist()
+
+            navigator.mediaSession.setActionHandler("play", () => {
+                console.log('play')
+                this.play()
+            });
+            navigator.mediaSession.setActionHandler("pause", () => {
+                this.stop()
+            });
+            navigator.mediaSession.setActionHandler("stop", () => {
+                this.stop()
+            });
+            // navigator.mediaSession.setActionHandler("seekbackward", () => {
+            //     this.setBpm(this.bpm - 10)
+            // });
+            // navigator.mediaSession.setActionHandler("seekforward", () => {
+            //     this.setBpm(this.bpm + 10)
+            // });
+            navigator.mediaSession.setActionHandler("seekto", (e) => {
+                console.log(e)
+            });
+            navigator.mediaSession.setActionHandler("previoustrack", () => {
+                this.setBpm(this.bpm - 10)
+            });
+            navigator.mediaSession.setActionHandler("nexttrack", () => {
+                this.setBpm(this.bpm + 10)
+            });
+        }
+        console.log(navigator.mediaSession)
+    }
+
+    setUpMediaAudio = () => {
+        if (!this.audioTag) {
+            console.log('create audioTag')
+            this.audioTag = document.createElement('audio');
+            document.body.appendChild(this.audioTag);
+            this.audioTag.src = "https://raw.githubusercontent.com/anars/blank-audio/master/10-seconds-of-silence.mp3";
+            this.audioTag.loop = true;
+        }
     }
 }
