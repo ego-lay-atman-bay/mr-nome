@@ -15,10 +15,27 @@ const {
 measureWidth = 150
 document.documentElement.style.setProperty('--measure-width', measureWidth + 'px')
 
-function findClosest (number, array) {
-    var indexArr = array.map(function(k) { return Math.abs(k - number) })
+function findClosest(number, array) {
+    var indexArr = array.map(function (k) {
+        return Math.abs(k - number)
+    })
     var min = Math.min.apply(Math, indexArr)
     return array[indexArr.indexOf(min)]
+}
+
+const NOTE_NAMES = {
+    1: 'w',
+    2: 'h',
+    4: 'q',
+    8: '8',
+    16: '16',
+    32: '32',
+    64: '64',
+    128: '128',
+    'w': 'w',
+    'h': 'h',
+    'q': 'q',
+    'e': '8',
 }
 
 function renderMeasure(
@@ -32,6 +49,10 @@ function renderMeasure(
     tempo = {
         starting: null,
         ending: null,
+        starting_note: null,
+        ending_note: null,
+        starting_note_dots: null,
+        ending_note_dots: null,
         show_starting: null,
         show_ending: null,
         show_rit: null,
@@ -92,7 +113,7 @@ function renderMeasure(
             if (m === element) {
                 return m.getAttribute('data-starting-bpm')
             }
-    
+
             if (m.getAttribute('data-ending-bpm')) {
                 return m.getAttribute('data-ending-bpm')
             } else {
@@ -119,6 +140,73 @@ function renderMeasure(
             tempo.show_acc = true
         }
     }
+
+    if (tempo.starting_note == null) {
+        tempo.starting_note = 'q'
+        tempo.starting_note_dots = 0
+
+        starting_note = getLastMeasureInfo(element, (m, check) => {
+            if (m === element) {
+                return m.getAttribute('data-starting-tempo-note')
+            }
+
+            if (m.getAttribute('data-ending-tempo-note')) {
+                return m.getAttribute('data-ending-tempo-note')
+            } else {
+                return m.getAttribute('data-starting-tempo-note')
+            }
+        })
+
+        console.log('starting_note:', starting_note)
+
+        if (starting_note) {
+            let dots = 0
+            let duration = 'q'
+
+            for (const letter of starting_note) {
+                if (letter == 'd') {
+                    dots += 1
+                } else if (NOTE_NAMES[letter]) {
+                    duration = NOTE_NAMES[letter]
+                }
+            }
+
+            tempo.starting_note = duration
+            tempo.starting_note_dots = dots
+        }
+    }
+
+    if (tempo.ending_note == null) {
+        tempo.ending_note = 'q'
+        tempo.ending_note_dots = 0
+
+        ending_note = getLastMeasureInfo(element, (m, check) => {
+            if (m.getAttribute('data-ending-tempo-note')) {
+                return m.getAttribute('data-ending-tempo-note')
+            } else {
+                return m.getAttribute('data-starting-tempo-note')
+            }
+        })
+
+        console.log('ending_note:', ending_note)
+
+        if (ending_note) {
+            let dots = 0
+            let duration = 'q'
+
+            for (const letter of ending_note) {
+                if (letter == 'd') {
+                    dots += 1
+                } else if (NOTE_NAMES[letter]) {
+                    duration = NOTE_NAMES[letter]
+                }
+            }
+
+            tempo.ending_note = duration
+            tempo.ending_note_dots = dots
+        }
+    }
+
     if (tempo.show_starting == null) {
         tempo.show_starting = true
 
@@ -134,14 +222,37 @@ function renderMeasure(
                 if (m === previousMeasure) {
                     return m.getAttribute('data-starting-bpm')
                 }
-        
+
                 if (m.getAttribute('data-ending-bpm')) {
                     return m.getAttribute('data-ending-bpm')
                 } else {
                     return m.getAttribute('data-starting-bpm')
                 }
             }))
-            tempo.show_starting = (previousEndingTempo != tempo.starting) || ((previousStartingTempo != previousEndingTempo))
+
+            let startingNote = getLastMeasureInfo(element, (m, check) => {
+                if (m === element) {
+                    return m.getAttribute('data-starting-tempo-note')
+                }
+
+                if (m.getAttribute('data-ending-tempo-note')) {
+                    return m.getAttribute('data-ending-tempo-note')
+                } else {
+                    return m.getAttribute('data-starting-tempo-note')
+                }
+            })
+
+            let previousEndingNote = getLastMeasureInfo(previousMeasure, (m, check) => {
+                if (m.getAttribute('data-ending-tempo-note')) {
+                    return m.getAttribute('data-ending-tempo-note')
+                } else {
+                    return m.getAttribute('data-starting-tempo-note')
+                }
+            })
+
+            tempo.show_starting = (previousEndingTempo != tempo.starting) ||
+                ((previousStartingTempo != previousEndingTempo)) ||
+                (startingNote != previousEndingNote)
         }
     }
 
@@ -153,18 +264,44 @@ function renderMeasure(
                 if (m === nextMeasure) {
                     return m.getAttribute('data-starting-bpm')
                 }
-        
+
                 if (m.getAttribute('data-ending-bpm')) {
                     return m.getAttribute('data-ending-bpm')
                 } else {
                     return m.getAttribute('data-starting-bpm')
                 }
             }))
-            tempo.show_ending = (nextStartingTempo != tempo.ending) && tempo.ending != tempo.starting
+
+
+            let nextStartingNote = getLastMeasureInfo(nextMeasure, (m, check) => {
+                if (m === nextMeasure) {
+                    return m.getAttribute('data-starting-tempo-note')
+                }
+
+                if (m.getAttribute('data-ending-tempo-note')) {
+                    return m.getAttribute('data-ending-tempo-note')
+                } else {
+                    return m.getAttribute('data-starting-tempo-note')
+                }
+            })
+
+            let endingNote = getLastMeasureInfo(element, (m, check) => {
+                if (m.getAttribute('data-ending-tempo-note')) {
+                    return m.getAttribute('data-ending-tempo-note')
+                } else {
+                    return m.getAttribute('data-starting-tempo-note')
+                }
+            })
+
+            console.log(('' + tempo.starting_note_dots + tempo.starting_note), ('' + tempo.ending_note_dots + tempo.ending_note))
+
+            tempo.show_ending =
+                (nextStartingTempo != tempo.ending) && tempo.ending != tempo.starting ||
+                (tempo.ending != tempo.starting) && nextMeasure.getAttribute('data-measure') == 'add' ||
+                (endingNote != nextStartingNote) && (tempo.ending != tempo.starting) ||
+                ('' + tempo.starting_note_dots + tempo.starting_note) != ('' + tempo.ending_note_dots + tempo.ending_note)
         }
     }
-
-    console.log('render tempo:', tempo)
 
     if (measure == null) {
         measure = element.getAttribute('data-measure')
@@ -204,40 +341,40 @@ function renderMeasure(
     stave.draw = function () {
         const t = this.checkContext();
         this.setRendered(),
-        this.applyStyle(),
-        t.openGroup("stave", this.getAttribute("id")),
-        this.formatted || this.format();
-        const e = this.options.num_lines
-          , i = this.width
-          , b = this.x;
+            this.applyStyle(),
+            t.openGroup("stave", this.getAttribute("id")),
+            this.formatted || this.format();
+        const e = this.options.num_lines,
+            i = this.width,
+            b = this.x;
         let a;
         for (let n = 0; n < e; n++)
             a = this.getYForLine(n),
             this.options.line_config[n].visible && (t.beginPath(),
-            t.moveTo(b, a),
-            t.lineTo(b + i, a),
-            t.stroke());
+                t.moveTo(b, a),
+                t.lineTo(b + i, a),
+                t.stroke());
         t.closeGroup(),
-        this.restoreStyle();
+            this.restoreStyle();
         for (let e = 0; e < this.modifiers.length; e++) {
             const i = this.modifiers[e];
             "function" == typeof i.draw && (i.applyStyle(t),
-            i.draw(this, this.getModifierXShift(e)),
-            i.restoreStyle(t))
+                i.draw(this, this.getModifierXShift(e)),
+                i.restoreStyle(t))
         }
         if (this.measure > 0) {
             t.save(),
-            t.setFont(this.textFont);
+                t.setFont(this.textFont);
             const e = t.measureText("" + this.measure).width;
             a = this.getYForTopText(0) + 3,
-            t.fillText("" + this.measure, this.x, a),
-            t.restore()
+                t.fillText("" + this.measure, this.x, a),
+                t.restore()
         }
         return this
     }
-    
+
     // modified fillText that does not filter the x.
-    context.addText = function(text, x, y) {
+    context.addText = function (text, x, y) {
         if (!text || text.length <= 0) return this;
         const b = Object.assign(Object.assign({}, this.attributes), {
                 stroke: "none",
@@ -249,7 +386,7 @@ function renderMeasure(
     }
 
     console.log('stave', stave)
-    
+
     // Add a clef and time signature.
     if (timeSig.shown) {
         stave.addTimeSignature(timeSig.num_beats + '/' + timeSig.beat_value);
@@ -257,39 +394,28 @@ function renderMeasure(
     if (measure) {
         stave.setMeasure(measure)
     }
-    
+
     // Connect it to the rendering context and draw!
     stave.setContext(context);
-    
+
     let notes = [];
-    
+
     // A quarter-note C.
     // new StaveNote({ keys: ["b/4"], duration: "q" }),
-    
+
     // // A quarter-note D.
     // new StaveNote({ keys: ["b/4"], duration: "q" }),
-    
+
     // // A quarter-note rest. Note that the key (b/4) specifies the vertical
     // // position of the rest.
     // new StaveNote({ keys: ["b/4"], duration: "qr" }),
-    
+
     // // A C-Major chord.
     // new StaveNote({ keys: ["b/4"], duration: "q" }),
 
-    let noteNames = {
-        1: 'w',
-        2: 'h',
-        4: 'q',
-        8: '8',
-        16: '16',
-        32: '32',
-        64: '64',
-        128: '128',
-    }
-
     beat_value = timeSig.beat_value
 
-    if (noteNames[beat_value] == undefined) {
+    if (NOTE_NAMES[beat_value] == undefined) {
         beat_value = 8
     }
 
@@ -298,11 +424,11 @@ function renderMeasure(
             let beat = pattern[index];
             if (typeof beat == 'string') {
                 if (beat == 0) {
-                    beat = [noteNames[beat_value] + 'r']
+                    beat = [NOTE_NAMES[beat_value] + 'r']
                 } else if (beat == 1) {
-                    beat = [noteNames[beat_value]]
+                    beat = [NOTE_NAMES[beat_value]]
                 } else if (beat == 2) {
-                    beat = [noteNames[beat_value], 'a>']
+                    beat = [NOTE_NAMES[beat_value], 'a>']
                 }
                 // beat = [beat]
             }
@@ -320,24 +446,23 @@ function renderMeasure(
         }
     }
 
-    
+
     // notes.forEach(note => {
-        //     note.render_options.scale = 0.2
-        // });
-    
+    //     note.render_options.scale = 0.2
+    // });
+
     let tuplet = null
 
-    if (noteNames[timeSig.beat_value] == undefined) {
+    if (NOTE_NAMES[timeSig.beat_value] == undefined) {
         tuplet = new Tuplet(
-            notes,
-            {
+            notes, {
                 num_notes: timeSig.beat_value,
                 notes_occupied: parseInt(timeSig.num_beats),
                 ratioed: false,
             }
         )
     }
-        
+
     // Create a voice in 4/4 and add above notes
     const voice = new Voice({
         num_beats: timeSig.num_beats,
@@ -359,10 +484,10 @@ function renderMeasure(
 
         if (tempo.show_starting && tempo.starting != null) {
             console.log('measure', measure, tempo.starting)
-            let staveTempo = new StaveTempo(
-                {
+            let staveTempo = new StaveTempo({
                     bpm: tempo.starting,
-                    duration: 'q',
+                    duration: tempo.starting_note,
+                    dots: tempo.starting_note_dots,
                 },
                 0,
                 0,
@@ -373,13 +498,13 @@ function renderMeasure(
             staveTempo.textFont.size = 10
             stave.modifiers.push(staveTempo)
         }
-        
+
         if (tempo.show_ending && tempo.ending != null) {
             console.log('measure', measure, tempo.ending)
-            let staveTempo = new StaveTempo(
-                {
+            let staveTempo = new StaveTempo({
                     bpm: tempo.ending,
-                    duration: 'q',
+                    duration: tempo.ending_note,
+                    dots: tempo.ending_note_dots,
                 },
                 0,
                 0,
@@ -392,18 +517,17 @@ function renderMeasure(
         }
         console.log(stave)
 
-        
+
         stave.draw()
         voice.draw(context, stave)
 
         let text_x = '25%'
 
+        context.setFont('serif', '1rem', 100, 'italic')
         if (tempo.show_acc) {
-            context.setFont('serif', '1rem', 100, 'italic')
             context.addText('acc..', text_x, 20)
         }
         if (tempo.show_rit) {
-            context.setFont('serif', '1rem', 100, 'italic')
             context.addText('rit..', text_x, 20)
         }
     } else {
@@ -416,11 +540,8 @@ function renderMeasure(
         tuplet.setContext(context).draw()
     }
 
-    element.style.setProperty('width', (stave.getWidth() + 1) + 'px')
+    element.style.setProperty('width', stave.getWidth() + 'px')
     element.style.setProperty('height', '100px')
-    if (measure) {
-        // element.querySelector('text').setAttribute('x', 0)
-    }
 }
 
 function modeCheck() {
@@ -446,7 +567,7 @@ getLastMeasureInfo = function (measure, callback = (measure, check) => {
     if (!measure) {
         return ''
     }
-    
+
     if (callback(measure, false)) {
         return callback(measure, true)
     }
@@ -464,14 +585,19 @@ const measureEditorDialog = document.querySelector('#edit-measure')
 measureEditorDialog.cancelButton = measureEditorDialog.querySelector('#cancelButton')
 measureEditorDialog.confirmButton = measureEditorDialog.querySelector('#confirmDialog')
 
-measureEditorDialog.startTempo = measureEditorDialog.querySelector('#editor-start-tempo')
-measureEditorDialog.endTempo = measureEditorDialog.querySelector('#editor-end-tempo')
-measureEditorDialog.startTempo.lastValue = measureEditorDialog.startTempo.value
+measureEditorDialog.tempo = {
+    startTempo: measureEditorDialog.querySelector('#editor-start-tempo'),
+    endTempo: measureEditorDialog.querySelector('#editor-end-tempo'),
+    startNote: measureEditorDialog.querySelector('#editor-tempo-start-note'),
+    endNote: measureEditorDialog.querySelector('#editor-tempo-end-note'),
+}
 
-measureEditorDialog.startTempo.addEventListener('input', function (e) {
+measureEditorDialog.tempo.startTempo.lastValue = measureEditorDialog.tempo.startTempo.value
 
-    if (measureEditorDialog.endTempo.value == this.lastValue) {
-        measureEditorDialog.endTempo.value = this.value
+measureEditorDialog.tempo.startTempo.addEventListener('input', function (e) {
+
+    if (measureEditorDialog.tempo.endTempo.value == this.lastValue) {
+        measureEditorDialog.tempo.endTempo.value = this.value
     }
 
     this.lastValue = this.value
@@ -501,7 +627,7 @@ measureEditorDialog.updateBeats = function () {
             note.value = 0
 
             this.rhythm.appendChild(note)
-            
+
             note.addEventListener('click', function (e) {
                 console.log('note', this)
                 this.value = (parseInt(this.value) + 1) % 3
@@ -540,7 +666,7 @@ measureEditorDialog.timeSignature.noteDuration.addEventListener('input', functio
         64,
         128,
     ]
-    
+
     if (this.value != '') {
         if (!notes.includes(this.value)) {
             this.value = findClosest(this.value, notes)
@@ -581,14 +707,36 @@ measureEditorDialog.edit = function (measure, adding = false) {
         }
     })
 
+    let startNote = getLastMeasureInfo(measure, (m, check) => {
+        if (m === measure) {
+            return m.getAttribute('data-starting-tempo-note')
+        }
+
+        if (m.getAttribute('data-ending-tempo-note')) {
+            return m.getAttribute('data-ending-tempo-note')
+        } else {
+            return m.getAttribute('data-starting-tempo-note')
+        }
+    })
+    let endNote = getLastMeasureInfo(measure, (m, check) => {
+        if (m.getAttribute('data-ending-tempo-note')) {
+            return m.getAttribute('data-ending-tempo-note')
+        } else {
+            return m.getAttribute('data-starting-tempo-note')
+        }
+    })
+
     let timeSignature = timeSignatureText.split('/')
 
     console.log(timeSignature)
 
     this.timeSignature.beatsPerMeasure.value = timeSignature[0]
     this.timeSignature.noteDuration.value = timeSignature[1]
-    this.startTempo.value = startTempo
-    this.endTempo.value = endTempo
+    this.tempo.startTempo.value = startTempo
+    this.tempo.endTempo.value = endTempo
+
+    this.tempo.startNote.value = startNote
+    this.tempo.endNote.value = endNote
 
     this.updateBeats()
 
@@ -602,7 +750,8 @@ measureEditorDialog.edit = function (measure, adding = false) {
         noteElement.value = note
     }
 
-    this.startTempo.lastValue = this.startTempo.value
+    this.tempo.startTempo.lastValue = this.tempo.startTempo.value
+
 
     this.submit = function () {
         if (this.returnValue == 'cancel') {
@@ -611,14 +760,17 @@ measureEditorDialog.edit = function (measure, adding = false) {
             }
             return
         }
-        
+
         let nextMeasure = measure.nextElementSibling
         let previousMeasure = measure.previousElementSibling
-        
+
         let timeSignatureText = ''
         let startTempo = 0
 
-        let showTimeSignature =  true
+        let startNote = 'q'
+        let endNote = 'q'
+
+        let showTimeSignature = true
         let previous_measure_number = 0
 
         if (previousMeasure) {
@@ -628,7 +780,7 @@ measureEditorDialog.edit = function (measure, adding = false) {
                 startTempo = previousMeasure.getAttribute('data-starting-bpm')
             }
         }
-        
+
         if (this.returnValue == 'delete') {
             let parent = measure.parentNode
 
@@ -647,32 +799,49 @@ measureEditorDialog.edit = function (measure, adding = false) {
                 this.timeSignature.beatsPerMeasure.value,
                 this.timeSignature.noteDuration.value,
             ].join('/')
-            startTempo = this.startTempo.value
-            endTempo = this.endTempo.value
-    
+            startTempo = this.tempo.startTempo.value
+            endTempo = this.tempo.endTempo.value
+
+            startNote = this.tempo.startNote.value
+            endNote = this.tempo.endNote.value
+
             rhythm = []
             for (let index = 0; index < this.rhythm.children.length; index++) {
                 const note = this.rhythm.children[index];
                 rhythm.push(note.value)
             }
-    
+
             rhythmText = rhythm.join(',')
 
             let lastStartTempo = getLastMeasureInfo(previousMeasure, (m, check) => {
                 if (m === measure) {
                     return m.getAttribute('data-starting-bpm')
                 }
-        
+
                 if (m.getAttribute('data-ending-bpm')) {
                     return m.getAttribute('data-ending-bpm')
                 } else {
                     return m.getAttribute('data-starting-bpm')
                 }
             })
-            
+
+            let lastStartNote = getLastMeasureInfo(previousMeasure, (m, check) => {
+                if (m === measure) {
+                    return m.getAttribute('data-starting-tempo-note')
+                }
+        
+                if (m.getAttribute('data-ending-tempo-note')) {
+                    return m.getAttribute('data-ending-tempo-note')
+                } else {
+                    return m.getAttribute('data-starting-tempo-note')
+                }
+            })
+
             measure.setAttribute('data-measure', parseInt(previous_measure_number) + 1)
             measure.setAttribute('data-starting-bpm', lastStartTempo == startTempo ? '' : startTempo)
             measure.setAttribute('data-ending-bpm', startTempo == endTempo ? '' : endTempo)
+            measure.setAttribute('data-starting-tempo-note', startNote == lastStartNote ? '' : startNote)
+            measure.setAttribute('data-ending-tempo-note', endNote == startNote ? '' : endNote)
             measure.setAttribute('data-time-signature', timeSignatureText)
             measure.setAttribute('data-rhythm', rhythmText)
 
@@ -701,6 +870,7 @@ measureEditorDialog.edit = function (measure, adding = false) {
     }
 
     this.showModal()
+    this.timeSignature.beatsPerMeasure.focus()
 }
 
 function editMeasure(measure) {
@@ -733,7 +903,7 @@ function addMeasure(adder) {
         tempo = previousMeasure.getAttribute('data-starting-bpm')
         timeSignature = previousMeasure.getAttribute('data-time-signature')
     }
-    
+
     let newMeasure = document.createElement('button')
     newMeasure.classList.add('measure')
     newMeasure.setAttribute('data-rhythm', rhythm)
@@ -749,7 +919,7 @@ function addMeasure(adder) {
 
     measureEditorDialog.edit(newMeasure, true)
 
-} 
+}
 
 function updateMeasures() {
     let measures = document.querySelectorAll('.measure')
@@ -761,13 +931,11 @@ function updateMeasures() {
         if (measure_number == 'add') {
             renderMeasure(
                 measure,
-                [],
-                {
+                [], {
                     num_beats: 1,
                     beat_value: 1,
                     shown: false,
-                },
-                {
+                }, {
                     starting: null,
                     ending: null,
                     show_starting: false,

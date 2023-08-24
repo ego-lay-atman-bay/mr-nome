@@ -11,6 +11,7 @@ function triggerOnchange (element) {
 function initMenu(element, options) {
     element.trigger = element.querySelector('.trigger')
     element._options = element.querySelector('.options')
+
     element.getval = function() {
         return this.trigger.value || this.trigger.getAttribute('value')
     }
@@ -28,6 +29,7 @@ function initMenu(element, options) {
             newval.classList.add('selected')
             this.trigger.innerHTML = newval.innerHTML
         }
+        this.trigger.setAttribute('aria-expanded', 'false')
     }
 
     element.getMenu = function () {
@@ -85,13 +87,40 @@ function initMenu(element, options) {
 
         this._options.append(newOption)
     }
+
+    let optionElements = element._options.querySelectorAll('.option')
+
+    for (const option of optionElements) {
+        option.addEventListener('click', () => {
+            element.setval(option.getAttribute('value'))
+            triggerOnchange(element.trigger)
+        })
+    }
+
+    element.trigger.addEventListener('click', function (e) {
+        let expanded = this.getAttribute('aria-expanded') == 'true'
+        
+        console.log('expanded?', expanded)
+
+        this.setAttribute('aria-expanded', String(!expanded))
+    })
 }
 
-let menus = document.querySelectorAll('.select');
-for (const key in menus) {
-    if (Object.hasOwnProperty.call(menus, key)) {
-        const element = menus[key]
-        initMenu(element)
-        continue
-    }
+const menus = document.querySelectorAll('.select');
+
+for (const menu of menus) {
+    initMenu(menu)
 }
+
+document.addEventListener('click', (e) => {
+    let target = e.target
+
+    const menuTriggers = document.querySelectorAll('.select .trigger')
+
+    for (const trigger of menuTriggers) {
+        if (trigger == target) {
+            continue
+        }
+        trigger.setAttribute('aria-expanded', 'false')
+    }
+})

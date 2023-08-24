@@ -1,5 +1,7 @@
-:root {
+.select {
     --select-font: Arial;
+
+    --select-padding: 0.1em 0.5em;
 
     --select-background: white;
     --select-hover-background: skyblue;
@@ -13,7 +15,9 @@
     --select-border-radius: 3px;
     --select-font-size: 1rem;
     
+    --select-option-font-size: 0.9em;
     --select-option-gap: 0;
+    --select-option-padding: 0;
     --select-options-border-width: 0.1em;
 
     --select-options-border-radius: 0.4em;
@@ -35,6 +39,7 @@
 }
 
 .select .trigger {
+    font-size: var(--select-font-size);
     position: relative;
     display: flex;
     align-items: center;
@@ -45,7 +50,7 @@
     border: var(--select-border-color) solid var(--select-border-width);
     border-radius: var(--select-border-radius);
 
-    padding: 0.1em 0.5em;
+    padding: var(--select-padding);
 }
 
 .select .trigger:hover {
@@ -65,12 +70,25 @@
     border-right: var(--triangle-size) solid transparent;
 }
 
+/* .select .trigger[aria-expanded=true]::after {
+
+}
+
+@keyframes triangle-transform {
+    0% {
+
+    }
+} */
+
 .select .options {
     display: none;
     position: absolute;
     z-index: 999;
 
     min-width: 100%;
+    max-height: calc(50vh - 200%);
+    min-height: 6rem;
+
     width: max-content;
     top: 100%;
     left: 0;
@@ -85,9 +103,10 @@
 
     background-color: var(--select-border-color);
     gap: var(--select-option-gap);
+    overflow: auto;
 }
 
-.select:focus-within .trigger {
+.select .trigger[aria-expanded=true] {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 
@@ -95,12 +114,13 @@
     color: var(--select-selected-text-color);
 }
 
-.select:focus-within .options {
+.select .trigger[aria-expanded=true] + .options {
     display: flex;
 }
 
 .select .option {
-    font-size: 0.9em;
+    font-size: var(--select-option-font-size);
+    padding: var(--select-option-padding);
 
     border: 0;
 
@@ -109,6 +129,11 @@
 
     text-align: left;
 }
+
+/* .select .options .option:nth-last-child(1 of :not(.hidden)) {
+    border-bottom-left-radius: var(--select-options-border-radius);
+    border-bottom-right-radius: var(--select-options-border-radius);
+} */
 
 .select .option.hidden {
     display: none;

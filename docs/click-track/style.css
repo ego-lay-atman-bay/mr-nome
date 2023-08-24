@@ -1,3 +1,12 @@
+@font-face {
+    font-family: 'Bravura';
+    src:
+        url('../common/fonts/BravuraText_1-393.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
 :root {
     --measure-width: 150px;
 }
@@ -29,10 +38,11 @@
     display: none;
 }
 
-.mode-selector input[type="radio"]:checked + label {
+.mode-selector input[type="radio"]:checked+label {
     background-color: var(--toggle-selected-color);
 }
-.mode-selector input[type="radio"]:checked + label:hover {
+
+.mode-selector input[type="radio"]:checked+label:hover {
     background-color: var(--toggle-selected-hover-color);
 }
 
@@ -47,16 +57,16 @@
     display: none;
 }
 
-#player-controls input[type="checkbox"]:checked + label {
+#player-controls input[type="checkbox"]:checked+label {
     background-color: var(--toggle-selected-color);
 }
 
-#player-controls input[type="checkbox"]:checked + label:hover {
+#player-controls input[type="checkbox"]:checked+label:hover {
     background-color: var(--toggle-selected-hover-color);
 }
 
 #player-controls label {
-    
+
     padding: 0.2em 0.5em;
     border-radius: 5px;
 }
@@ -66,24 +76,24 @@
     background: transparent;
     width: 0;
     --size: 2rem;
-    
+
     height: var(--size);
-  
+
     border-color: transparent transparent transparent #202020;
     transition: 250ms border ease;
     cursor: pointer;
-    
+
     border-style: solid;
     border-width: calc(var(--size) / 2) 0 calc(var(--size) / 2) calc(var(--size) * 0.8);
 }
 
 .play-button:hover {
-  border-style: double;
-  border-width: 0px 0 0px calc(var(--size) * 0.81);
+    border-style: double;
+    border-width: 0px 0 0px calc(var(--size) * 0.81);
 }
 
 .play-button:hover {
-  border-color: transparent transparent transparent #404040;
+    border-color: transparent transparent transparent #404040;
 }
 
 /* track */
@@ -190,4 +200,95 @@
 
 .measure-editor-note[value="2"] {
     background-color: limegreen;
+}
+
+/* note-selector */
+
+.note-selector {
+    --select-font-size: 1.5rem;
+    --select-padding: 0 0.5rem;
+    --select-option-padding: 0 0.5rem;
+    --select-border-color: transparent;
+    --select-option-font-size: 1em;
+}
+
+.note {
+    font-family: 'Bravura';
+    letter-spacing: 0.3em;
+
+    --dot: "\10800";
+    --whole: "\106AE";
+    --half: "\106C0";
+    --quarter: "\106E0";
+    --eighth: "\10700";
+    --sixteenth: "\10720";
+    --thirty-second: "\10740";
+    --sixty-fourth: "\10760";
+    --hundred-twenty-eighth: "\10780";
+}
+
+.note[value="dw"]::before {
+    content: var(--whole) var(--dot);
+}
+
+.note[value="w"]::before {
+    content: var(--whole);
+}
+
+.note[value="dh"]::before {
+    content: var(--half) var(--dot);
+}
+
+.note[value="h"]::before {
+    content: var(--half);
+}
+
+.note[value="dq"]::before {
+    content: var(--quarter) var(--dot);
+}
+
+.note[value="q"]::before {
+    content: var(--quarter);
+}
+
+.note[value="de"]::before,
+.note[value="d8"]::before {
+    content: var(--eighth) var(--dot);
+}
+
+.note[value="e"]::before,
+.note[value="8"]::before {
+    content: var(--eighth);
+}
+
+.note[value="d16"]::before {
+    content: var(--sixteenth) var(--dot);
+}
+
+.note[value="16"]::before {
+    content: var(--sixteenth);
+}
+
+.note[value="d32"]::before {
+    content: var(--thirty-second) var(--dot);
+}
+
+.note[value="32"]::before {
+    content: var(--thirty-second);
+}
+
+.note[value="d64"]::before {
+    content: var(--sixty-fourth) var(--dot);
+}
+
+.note[value="64"]::before {
+    content: var(--sixty-fourth);
+}
+
+.note[value="d128"]::before {
+    content: var(--hundred-twenty-eighth) var(--dot);
+}
+
+.note[value="128"]::before {
+    content: var(--hundred-twenty-eighth);
 }
