@@ -28,7 +28,7 @@
 
 /* mode-selector */
 
-.mode-selector label {
+/* .mode-selector label {
     cursor: pointer;
     padding: 0.2em 0.5em;
     border-radius: 5px;
@@ -44,7 +44,7 @@
 
 .mode-selector input[type="radio"]:checked+label:hover {
     background-color: var(--toggle-selected-hover-color);
-}
+} */
 
 /* player-controls */
 
@@ -291,4 +291,50 @@
 
 .note[value="128"]::before {
     content: var(--hundred-twenty-eighth);
+}
+
+.barline {
+    font-family: 'Bravura';
+
+    text-align: center;
+
+    --single: "𝄀";
+    --double: "𝄁";
+    --end: "𝄂";
+    --start: "𝄃";
+    --repeat-begin: "𝄆";
+    --repeat-both: "\F45C";
+    --repeat-end: "𝄇";
+    --none: "𝄄";
+}
+
+.barline[value="7"]::before {
+    font-weight: 100;
+    content: var(--none);
+}
+
+.barline[value="1"]::before {
+    font-weight: 900;
+    content: var(--single);
+}
+
+.barline[value="2"]::before {
+    font-weight: 900;
+    content: var(--double);
+}
+
+.barline[value="3"]::before {
+    content: var(--end);
+}
+
+.barline[value="4"]::before {
+    content: var(--repeat-begin);
+}
+
+.barline[value="5"]::before {
+    content: var(--repeat-end);
+}
+
+.barline[value="6"]::before {
+    content: var(--repeat-both);
 }

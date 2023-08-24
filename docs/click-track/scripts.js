@@ -10,6 +10,7 @@ const {
     Tuplet,
     StaveTempo,
     Annotation,
+    BarlineType,
 } = Vex.Flow;
 
 measureWidth = 150
@@ -59,6 +60,10 @@ function renderMeasure(
         show_acc: null,
     },
     measure,
+    barline = {
+        starting: null,
+        ending: null,
+    }
 ) {
     function dotted(staveNote, noteIndex = -1) {
         if (noteIndex < 0) {
@@ -303,6 +308,13 @@ function renderMeasure(
         }
     }
 
+    if (barline.starting == null) {
+        barline.starting = parseInt(element.getAttribute('data-start-barline'))
+    }
+    if (barline.ending == null) {
+        barline.ending = parseInt(element.getAttribute('data-end-barline'))
+    }
+
     if (measure == null) {
         measure = element.getAttribute('data-measure')
         if (measure == 'add') {
@@ -470,6 +482,10 @@ function renderMeasure(
     });
     console.log(notes)
     voice.addTickables(notes);
+
+    // set barlines
+    stave.setBegBarType(!barline.starting ? 1 : barline.starting)
+    stave.setEndBarType(!barline.ending ? 1 : barline.ending)
 
     // Format and justify the notes to 400 pixels.
     var formatter = new Formatter()
@@ -726,6 +742,20 @@ measureEditorDialog.edit = function (measure, adding = false) {
         }
     })
 
+    let barline = {
+        start: measure.getAttribute('data-start-barline'),
+        end: measure.getAttribute('data-end-barline'),
+    }
+
+    
+    if (!barline.start) {
+        barline.start = 1
+    }
+    if (!barline.end) {
+        barline.end = 1
+    }
+    console.log('barline', barline)
+
     let timeSignature = timeSignatureText.split('/')
 
     console.log(timeSignature)
@@ -737,6 +767,17 @@ measureEditorDialog.edit = function (measure, adding = false) {
 
     this.tempo.startNote.value = startNote
     this.tempo.endNote.value = endNote
+
+    let startBarlineSelection = this.querySelector(`input[name="editor-start-barline"][value="${barline.start}"]`)
+    let endBarlineSelection = this.querySelector(`input[name="editor-end-barline"][value="${barline.end}"]`)
+
+    if (startBarlineSelection) {
+        startBarlineSelection.checked = true
+    }
+
+    if (endBarlineSelection) {
+        endBarlineSelection.checked = true
+    }
 
     this.updateBeats()
 
@@ -837,11 +878,17 @@ measureEditorDialog.edit = function (measure, adding = false) {
                 }
             })
 
+            
+            let startBarlineSelection = this.querySelector(`input[name="editor-start-barline"]:checked`)
+            let endBarlineSelection = this.querySelector(`input[name="editor-end-barline"]:checked`)
+
             measure.setAttribute('data-measure', parseInt(previous_measure_number) + 1)
             measure.setAttribute('data-starting-bpm', lastStartTempo == startTempo ? '' : startTempo)
             measure.setAttribute('data-ending-bpm', startTempo == endTempo ? '' : endTempo)
             measure.setAttribute('data-starting-tempo-note', startNote == lastStartNote ? '' : startNote)
             measure.setAttribute('data-ending-tempo-note', endNote == startNote ? '' : endNote)
+            measure.setAttribute('data-start-barline', !startBarlineSelection.value ? '1' : startBarlineSelection.value)
+            measure.setAttribute('data-end-barline', !endBarlineSelection.value ? '1' : endBarlineSelection.value)
             measure.setAttribute('data-time-signature', timeSignatureText)
             measure.setAttribute('data-rhythm', rhythmText)
 

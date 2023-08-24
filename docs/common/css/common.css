@@ -9,6 +9,10 @@
     --toggle-hover-color: lightgray;
     --toggle-selected-color: aqua;
     --toggle-selected-hover-color: lightblue;
+
+    --font-family-1: Arial;
+
+    --border-radius: 5px;
 }
 
 .content {
@@ -16,6 +20,47 @@
     display: grid;
     max-width: 20rem;
     width: 100%;
+}
+
+/* visually hidden, but spoken by screen readers */
+
+.visually-hidden {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    position: absolute !important;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px 1px 1px 1px);
+    clip: rect(1px, 1px, 1px, 1px);
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+/* select */
+
+.select {
+    --select-font: Arial;
+
+    --select-background: white;
+    --select-hover-background: var(--toggle-selected-hover-color);
+    --select-selected-background: var(--toggle-selected-color);
+    --select-text-color: black;
+    --select-hover-text-color: var(--select-text-color);
+    --select-selected-text-color: var(--select-text-color);
+    
+    --select-border-color: black;
+    --select-border-width: 1px;
+    --select-border-radius: var(--border-radius);
+    --select-font-size: 1rem;
+    
+    --select-option-gap: 0;
+    --select-options-border-width: 0.1em;
+
+    --select-options-border-radius: var(--border-radius);
+
+    --select-options-animation-duration: 40ms;
 }
 
 /* menus */
@@ -27,7 +72,7 @@
     --menu-active-bg: hsl(0, 0%, 85%);
     --menu-border-color: hsl(0, 0%, 80%);
     --menu-border: none;
-    --menu-border-radius: 5px;
+    --menu-border-radius: var(--border-radius);
     --menu-button-outline: none;
     --menu-font-size: 1rem;
     --menu-padding: 0.2em 0.5em;
@@ -98,4 +143,44 @@
 
 .toggle:hover {
     background-color: var(--toggle-hover-color);
+}
+
+/* dialog */
+
+dialog {
+    overflow: auto;
+}
+
+/* radio selector (radio buttons) */
+
+.radio-selector {
+
+}
+
+.radio-selector label {
+    cursor: pointer;
+    padding: 0.2em 0.5em;
+    border-radius: 5px;
+}
+
+.radio-selector input[type="radio"] {
+    /* display: none; */
+    width: 0;
+    height: 0;
+}
+
+.radio-selector label:hover {
+    background-color: var(--toggle-hover-color);
+}
+
+.radio-selector input[type="radio"]:checked+label {
+    background-color: var(--toggle-selected-color);
+}
+
+.radio-selector input[type="radio"]:checked+label:hover {
+    background-color: var(--toggle-selected-hover-color);
+}
+
+.radio-selector input[type="radio"]:focus-visible+label {
+    outline: 2px solid black;
 }
