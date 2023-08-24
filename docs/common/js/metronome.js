@@ -24,9 +24,8 @@ Metronome = class Metronome {
 
         if (audioTag) {
             this.audioTag = audioTag
-        } else {
-            this.setUpMediaAudio()
         }
+        this.setUpMediaAudio()
 
         this.audio = new Tone.Sampler({
             urls: {
@@ -44,8 +43,6 @@ Metronome = class Metronome {
 
         Tone.Transport.bpm.value = this.bpm;
 
-
-        
         this.audioButton.addEventListener("click", () => {
             console.log('audioButton click')
             const currentState = this.audioButton.getAttribute("data-state");
@@ -64,9 +61,11 @@ Metronome = class Metronome {
             if (this.playing) {
                 this.stop()
             }
+            this.setAudioPosition()
         })
         this.audioTag.addEventListener('play', () => {
             console.log('audioTag play')
+            this.audioTag.playbackRate = 0
             if (!this.playing) {
                 this.play()
             }
@@ -94,6 +93,7 @@ Metronome = class Metronome {
         this.currentBeat = 0;
         await Tone.start();
         this.playing = true;
+        this.setAudioPosition()
         if (this.audioTag && this.audioTag.paused) {
             this.audioTag.play()
         }
@@ -108,41 +108,29 @@ Metronome = class Metronome {
         this.audioButton.setAttribute("data-state", "stopped");
         this.playing = false;
         if (this.audioTag && !this.audioTag.paused) {
+            console.log('audio paused')
+            this.audioTag.playbackRate = 0.1
             this.audioTag.pause()
         }
+        this.setAudioPosition()
         // navigator.mediaSession.playbackState = 'paused'
         // this.loop.stop();
         Tone.Transport.stop();
-    }
-
-    getBeatMilliseconds(duration, bpm) {
-        duration = duration || 1;
-        bpm = bpm || this.bpm;
-
-        return (((60 / bpm) * (duration * 1000)))
-    }
-
-    waitBeat(beat) {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                resolve('resolved')
-            }, ((beat * (60 / this.bpm)) * 1000) - this.offsetTime)
-        })
-    }
-
-
-    playBeat(pitch) {
-        this.audio.triggerAttackRelease("C4", 1);;
-        // audio.currentTime = 0;
-        // audio.play();
-
-        // audio.start();
     }
 
     setBpm(bpm) {
         this.bpm = bpm || 120;
         Tone.Transport.bpm.value = this.bpm;
         this.getArtist()
+
+        this.setAudioPosition()
+    }
+
+    setAudioPosition() {
+        if (this.audioTag) {
+            console.log('audio tempo time')
+            this.audioTag.currentTime = this.bpm * 2
+        }
     }
 
     getArtist() {
@@ -161,13 +149,16 @@ Metronome = class Metronome {
             this.getArtist()
 
             navigator.mediaSession.setActionHandler("play", () => {
+                console.log(this)
                 console.log('play')
                 this.play()
             });
             navigator.mediaSession.setActionHandler("pause", () => {
+                console.log('pause')
                 this.stop()
             });
             navigator.mediaSession.setActionHandler("stop", () => {
+                console.log('stop')
                 this.stop()
             });
             // navigator.mediaSession.setActionHandler("seekbackward", () => {
@@ -176,26 +167,41 @@ Metronome = class Metronome {
             // navigator.mediaSession.setActionHandler("seekforward", () => {
             //     this.setBpm(this.bpm + 10)
             // });
-            navigator.mediaSession.setActionHandler("seekto", (e) => {
-                console.log(e)
-            });
             navigator.mediaSession.setActionHandler("previoustrack", () => {
                 this.setBpm(this.bpm - 10)
             });
             navigator.mediaSession.setActionHandler("nexttrack", () => {
                 this.setBpm(this.bpm + 10)
             });
+
+            navigator.mediaSession.setActionHandler("seekto", (e) => {
+                this.setBpm(Math.round(Math.min(e.seekTime, this.audioTag.duration - 1) / 2))
+            });
         }
         console.log(navigator.mediaSession)
     }
 
-    setUpMediaAudio = () => {
+    setUpMediaAudio () {
         if (!this.audioTag) {
             console.log('create audioTag')
-            this.audioTag = document.createElement('audio');
-            document.body.appendChild(this.audioTag);
-            this.audioTag.src = "https://raw.githubusercontent.com/anars/blank-audio/master/10-seconds-of-silence.mp3";
-            this.audioTag.loop = true;
+            this.audioTag = document.createElement('audio')
+            document.body.appendChild(this.audioTag)
+            this.audioTag.src = "assets/sounds/silence 10m.flac"
         }
+        
+        this.audioTag.addEventListener('seeked', (e) => {
+            console.log('audio seek')
+            if (this.audioTag.currentTime == 0) {
+                this.audioTag.currentTime = this.audioTag.duration
+            }
+            let time = Math.round(Math.min(this.audioTag.currentTime, this.audioTag.duration - 1) / 2)
+            if (time != this.bpm) {
+                this.setBpm(time)
+            }
+        })
+
+        this.audioTag.controls = false
+        this.audioTag.loop = true
+        this.audioTag.playbackRate = 0
     }
 }
