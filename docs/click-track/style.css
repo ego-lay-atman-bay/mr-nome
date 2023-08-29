@@ -1,8 +1,8 @@
 @font-face {
     font-family: 'Bravura';
-    src:
-        url('../common/fonts/BravuraText_1-393.woff') format('woff');
-    font-weight: normal;
+    src: url('../common/fonts/BravuraText.otf');
+    src: url('../common/fonts/BravuraText.woff');
+    font-weight: 100;
     font-style: normal;
     font-display: block;
 }
@@ -214,17 +214,17 @@
 
 .note {
     font-family: 'Bravura';
-    letter-spacing: 0.3em;
+    color: black;
 
-    --dot: "\10800";
-    --whole: "\106AE";
-    --half: "\106C0";
-    --quarter: "\106E0";
-    --eighth: "\10700";
-    --sixteenth: "\10720";
-    --thirty-second: "\10740";
-    --sixty-fourth: "\10760";
-    --hundred-twenty-eighth: "\10780";
+    --dot: "\ECB7";
+    --whole: "\ECA2  ";
+    --half: "\ECA3  ";
+    --quarter: "\ECA5  ";
+    --eighth: "\ECA7 ";
+    --sixteenth: "\ECA9 ";
+    --thirty-second: "\ECAB ";
+    --sixty-fourth: "\ECAD ";
+    --hundred-twenty-eighth: "\ECAF";
 }
 
 .note[value="dw"]::before {
@@ -298,14 +298,14 @@
 
     text-align: center;
 
-    --single: "𝄀";
-    --double: "𝄁";
-    --end: "𝄂";
-    --start: "𝄃";
-    --repeat-begin: "𝄆";
-    --repeat-both: "\F45C";
-    --repeat-end: "𝄇";
-    --none: "𝄄";
+    --single: "\E030 ";
+    --double: "\E031 ";
+    --end: "\E032 ";
+    --start: "\E033 ";
+    --repeat-begin: "\E040 ";
+    --repeat-both: "\E042 ";
+    --repeat-end: "\E041 ";
+    --none: "\E037 ";
 }
 
 .barline[value="7"]::before {
