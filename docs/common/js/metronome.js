@@ -186,7 +186,7 @@ Metronome = class Metronome {
             console.log('create audioTag')
             this.audioTag = document.createElement('audio')
             document.body.appendChild(this.audioTag)
-            this.audioTag.src = "assets/sounds/silence-10m.flac"
+            this.audioTag.src = "assets/sounds/silence 10m.flac"
         }
         
         this.audioTag.addEventListener('seeked', (e) => {
