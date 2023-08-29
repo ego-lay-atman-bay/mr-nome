@@ -224,7 +224,7 @@
     --sixteenth: "\ECA9 ";
     --thirty-second: "\ECAB ";
     --sixty-fourth: "\ECAD ";
-    --hundred-twenty-eighth: "\ECAF";
+    --hundred-twenty-eighth: "\ECAF ";
 }
 
 .note[value="dw"]::before {

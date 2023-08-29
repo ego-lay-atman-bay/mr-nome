@@ -8,6 +8,29 @@ function triggerOnchange (element) {
         element.fireEvent("onchange");
 }
 
+function findOverflowParents(element, initEl) {
+
+    function notVisible(el) {
+        let overflow = getComputedStyle(el).overflow;
+        return overflow !== 'visible';
+    }
+
+    let thisEl = element;
+    
+    if (thisEl == document.querySelector('html')) {
+        return thisEl;
+    }
+
+    // if (!initEl) console.log('** Overflow check commence!', thisEl);
+    let origEl = initEl || thisEl;
+    // if (notVisible(thisEl)) console.warn("Overflow found on:", thisEl.tagName, { issue: "OVERFLOW IS NOT VISIBLE", tagName: thisEl.tagName, id: thisEl.id, class: thisEl.className, element: thisEl });
+    if (thisEl != origEl && notVisible(thisEl)) {
+        return thisEl;
+    } else {
+        return findOverflowParents(thisEl.parentElement, origEl);
+    }
+}
+
 function initMenu(element, options) {
     element.trigger = element.querySelector('.trigger')
     element._options = element.querySelector('.options')
@@ -88,6 +111,31 @@ function initMenu(element, options) {
         this._options.append(newOption)
     }
 
+    element.fixHeight = function () {
+        let parent = findOverflowParents(this._options)
+
+        console.log('overflow', getComputedStyle(parent).overflow)
+        let overflow = getComputedStyle(parent).overflow
+
+        parent.style.overflow = 'hidden'
+
+        let parentSize = parent.getBoundingClientRect()
+        let size = this._options.getBoundingClientRect()
+
+        console.log('parent', parent)
+
+        console.log('parentSize', parentSize)
+        console.log('size', size)
+
+        let maxHeight = (parentSize.top - size.top) + parentSize.height
+
+        let border = getComputedStyle(parent).borderBottomWidth
+
+        this._options.style.setProperty('--max-height', `calc(${(maxHeight) + 'px'} - ${border})`)
+        
+        parent.style.overflow = overflow
+    }
+
     let optionElements = element._options.querySelectorAll('.option')
 
     for (const option of optionElements) {
@@ -103,7 +151,12 @@ function initMenu(element, options) {
         console.log('expanded?', expanded)
 
         this.setAttribute('aria-expanded', String(!expanded))
+
+        element.fixHeight()
     })
+
+    element.fixHeight()
+
 }
 
 const menus = document.querySelectorAll('.select');

@@ -44,6 +44,8 @@
     display: flex;
     align-items: center;
 
+    height: 100%;
+
     user-select: none;
 
     background: var(--select-background);
@@ -86,7 +88,7 @@
     z-index: 999;
 
     min-width: 100%;
-    max-height: calc(50vh - 200%);
+    height: var(--max-height, calc(50vh - 200%));
     min-height: 6rem;
 
     width: max-content;
