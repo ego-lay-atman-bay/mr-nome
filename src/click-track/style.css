@@ -87,12 +87,12 @@
     border-width: calc(var(--size) / 2) 0 calc(var(--size) / 2) calc(var(--size) * 0.8);
 }
 
-.play-button:hover {
+.play-button[data-state="playing"] {
     border-style: double;
     border-width: 0px 0 0px calc(var(--size) * 0.81);
 }
 
-.play-button:hover {
+.play-button[data-state="playing"] {
     border-color: transparent transparent transparent #404040;
 }
 

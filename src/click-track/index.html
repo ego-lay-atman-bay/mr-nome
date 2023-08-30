@@ -22,8 +22,12 @@
 
     <script src="../common/js/jquery-3.6.0.min.js"></script>
     <script src="../common/js/vexflow-4.2.2.js"></script>
+    <script src="../common/js/Tone.js"></script>
+    <script src="../common/js/click-track.js" async defer></script>
+
     <script type="module" src="../common/js/common.js" defer></script>
     <script src="../common/select/select.js" async defer></script>
+    <script src="scripts.js" async defer></script>
 </head>
 
 <body>
@@ -39,7 +43,6 @@
         </ul>
     </nav>
 
-    <script src="scripts.js" defer></script>
 
     <main class="content" id="content">
         <menu class="control-bar" id="control-bar">
@@ -66,7 +69,10 @@
                 <label class="toggle" for="mode-select">Select</label>
             </div>
             <div id="player-controls">
-                <button class="play-button"></button>
+                <div class="play">
+                    <button class="play-button" id="play-button" aria-controls="play-button-audio"></button>
+                    <audio src="../assets/sounds/silence-10m.flac" id="play-button-audio"></audio>
+                </div>
                 <input type="checkbox" name="player-controls" id="player-count-in">
                 <label class="toggle" for="player-count-off">Count off</label>
                 <label for="player-speed">Speed:</label>
@@ -75,7 +81,63 @@
             </div>
         </menu>
         <div class="track" id="track">
-            <button class="measure" id="measure-1"
+            <!-- <button class="measure" id="measure-1"
+                data-measure="1"
+                data-starting-bpm="120" data-ending-bpm=""
+                data-starting-tempo-note="q" data-ending-tempo-note=""
+                data-start-barline="4"
+                data-end-barline="3"
+                data-tempo-measure-span="1"
+                data-time-signature="4/4"
+                data-rhythm="2,1,1,1">
+            </button>
+
+            <button class="measure" id="measure-2"
+                data-measure="2"
+                data-starting-bpm="" data-ending-bpm=""
+                data-starting-tempo-note="q" data-ending-tempo-note="q"
+                data-start-barline="1"
+                data-end-barline="1"
+                data-tempo-measure-span="2"
+                data-time-signature="5/4"
+                data-rhythm="2,1,1,1,1">
+            </button>
+
+            <button class="measure" id="measure-3"
+                data-measure="3"
+                data-starting-bpm="" data-ending-bpm=""
+                data-starting-tempo-note="" data-ending-tempo-note=""
+                data-start-barline="1"
+                data-end-barline="1"
+                data-tempo-measure-span="1"
+                data-time-signature="5/4"
+                data-rhythm="2,1,1,1,1">
+            </button>
+
+            <button class="measure" id="measure-4"
+                data-measure="4"
+                data-starting-bpm="" data-ending-bpm=""
+                data-starting-tempo-note="" data-ending-tempo-note=""
+                data-start-barline="1"
+                data-end-barline="1"
+                data-tempo-measure-span="1"
+                data-time-signature="6/8"
+                data-rhythm="2,1,1,2,1,1">
+            </button>
+
+            <button class="measure" id="measure-5"
+                data-measure="5"
+                data-starting-bpm="120" data-ending-bpm=""
+                data-starting-tempo-note="q" data-ending-tempo-note=""
+                data-start-barline="1"
+                data-end-barline="1"
+                data-tempo-measure-span="1"
+                data-time-signature="5/4"
+                data-rhythm="1,0,0,1,1">
+            </button> -->
+
+            
+                <button class="measure" id="measure-1"
                 data-measure="1"
                 data-starting-bpm="120" data-ending-bpm=""
                 data-starting-tempo-note="dq" data-ending-tempo-note=""
@@ -129,7 +191,7 @@
                 data-time-signature="5/4"
                 data-rhythm="1,0,0,1,1">
             </button>
-
+            
 
             <button class="measure" id="add-measure" data-measure="add"></button>
         </div>

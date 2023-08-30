@@ -1022,3 +1022,115 @@ function updateMeasures() {
 }
 
 updateMeasures()
+
+function createMeasure (data = {
+    measure: null,
+    rhythm: [],
+    time_signature: null,
+    tempo: {
+        starting: null,
+        ending: null,
+        starting_note: null,
+        ending_note: null,
+    },
+    barline: {
+        starting: null,
+        ending: null,
+    }
+}) {
+    let measure = document.createElement('button')
+    measure.classList.add('measure')
+    
+    const track = document.querySelector('#track')
+    const measureAdder = track.querySelector('[data-measure="add"]')
+
+    const lastMeasure = measureAdder.previousElementSibling
+
+    measure.setAttribute('data-measure', data.measure || parseFloat(lastMeasure.getAttribute('data-measure') + 1))
+    measure.setAttribute('data-starting-bpm', data.tempo.starting || '')
+    measure.setAttribute('data-ending-bpm', data.tempo.ending || '')
+    measure.setAttribute('data-starting-tempo-note', data.tempo.starting_note || '')
+    measure.setAttribute('data-ending-tempo-note', data.tempo.ending_note || '')
+    measure.setAttribute('data-start-barline', data.barline.starting || '1')
+    measure.setAttribute('data-end-barline', data.barline.ending || '1')
+    measure.setAttribute('data-time-signature', data.time_signature.join('/') || data.time_signature || lastMeasure.getAttribute('data-time-signature'))
+    measure.setAttribute('data-rhythm', data.rhythm.join(',') || data.rhythm || lastMeasure.getAttribute('data-rhythm'))
+
+    if (measureAdder) {
+        track.insertBefore(measure,measureAdder)
+    } else {
+        track.appendChild(measure)
+    }
+
+    renderMeasure(measure)
+
+    measure.addEventListener('click', (e) => {
+        measureClickHandler(e, measure)
+    })
+
+    return measure
+}
+
+// save stuff
+
+const SAVE_VERSION = 1
+
+function getTrackData () {
+    const measures = document.querySelectorAll('.track .measure:not([data-measure="add"])')
+
+    let save = {
+        version: SAVE_VERSION,
+        measures: []
+    }
+
+    for (const element of measures) {
+        let measure = {
+            measure: element.getAttribute('data-measure'),
+            rhythm: element.getAttribute('data-rhythm').split(','),
+            time_signature: element.getAttribute('data-time-signature').split('/').map((t) => parseFloat(t) || 4),
+            tempo: {
+                starting: element.getAttribute('data-starting-bpm'),
+                ending: element.getAttribute('data-ending-bpm'),
+                starting_note: element.getAttribute('data-starting-tempo-note'),
+                ending_note: element.getAttribute('data-ending-tempo-note'),
+            },
+            barline: {
+                starting: element.getAttribute('data-start-barline'),
+                ending: element.getAttribute('data-end-barline'),
+            }
+        }
+
+        save.measures.push(measure)
+    }
+
+    return save
+}
+
+function resetTrack () {
+    const measures = document.querySelectorAll('.track .measure:not([data-measure="add"])')
+
+    for (const element of measures) {
+        element.remove()
+    }
+}
+
+function loadTrack (data) {
+    resetTrack()
+
+    const track = document.querySelector('#track')
+
+    for (const measure of data.measures) {
+        createMeasure(measure)
+    }
+}
+
+// play track
+
+const button = document.querySelector("#play-button");
+const audioPlayer = document.getElementById(button.getAttribute('aria-controls'))
+
+let track = getTrackData()
+
+clickTrack = new ClickTrack(track, button, (clickTrack) => {
+    clickTrack.data = getTrackData()
+})
