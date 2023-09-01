@@ -1,6 +1,5 @@
-
 if (false) {
-    Tone = require('tone')
+    const Tone = require('tone/build/esm/core/Tone')
 }
 
 ClickTrack = class ClickTrack {
@@ -94,7 +93,7 @@ ClickTrack = class ClickTrack {
         this.audioTag.addEventListener('pause', () => {
             console.log('audioTag pause')
             if (this.playing) {
-                this.stop()
+                this.pause()
             }
             // this.setAudioPosition()
         })
@@ -103,11 +102,29 @@ ClickTrack = class ClickTrack {
 
             buttonCallback(this)
 
-            this.audioTag.playbackRate = 0
+            // this.audioTag.playbackRate = 0
             if (!this.playing) {
                 this.play()
             }
         })
+    }
+
+    getLastMeasureInfo(measureIndex, callback = (measure, measureIndex, check) => {
+        return measure.tempo.starting
+    }) {
+        if (!this.data.measures[measureIndex]) {
+            return null
+        }
+
+        if (callback(this.data.measures[measureIndex], measureIndex, false)) {
+            return callback(this.data.measures[measureIndex], measureIndex, true)
+        }
+
+        if (measureIndex == 0) {
+            return callback(this.data.measures[measureIndex], measureIndex, true)
+        }
+
+        return this.getLastMeasureInfo(measureIndex - 1, callback)
     }
 
     makeTrack() {
@@ -118,6 +135,10 @@ ClickTrack = class ClickTrack {
 
         Tone.Transport.timeSignature = this.data.measures[0].time_signature
 
+        let measureIndex = 0
+
+        let repeats = {}
+
         for (let measureNumber = 0; measureNumber < this.data.measures.length; measureNumber++) {
             const measure = this.data.measures[measureNumber];
 
@@ -126,8 +147,20 @@ ClickTrack = class ClickTrack {
 
                 console.log('new time signature', measure.time_signature)
                 
+                console.log('measureNumber', measureNumber)
+
                 let tempo = {
-                    starting: measure.tempo.starting,
+                    starting: this.getLastMeasureInfo(measureNumber, (m) => {
+                        if (m === measure) {
+                            return m.tempo.starting
+                        }
+                
+                        if (m.tempo.ending) {
+                            return m.tempo.ending
+                        } else {
+                            return m.tempo.starting
+                        }
+                    }),
                     ending: measure.tempo.ending,
                 }
 
@@ -225,11 +258,38 @@ ClickTrack = class ClickTrack {
 
             quarter_notes += parseFloat(measure.time_signature[0] / (measure.time_signature[1] / 4))
 
+            if (measure.barline.ending == 5) {
+                if (measure.repeat == undefined ) {
+                    measure.repeat = 2
+                }
+                
+                measure.repeat -= 1
+
+                if (measure.repeat < 0) {
+                    measure.repeat = 1
+                }
+                
+                if (measure.repeat > 0) {
+                    let repeatStart = this.getLastMeasureInfo(measureNumber, (measure, index, check) => {
+                        if (measure.barline.starting == 4 || index == 0) {
+                            return check ? index : true
+                        } else {
+                            return false
+                        }
+                    })
+
+                    measureNumber = repeatStart - 1
+                    
+                }
+
+            }
             
             // if (measure.time_signature) {
             //     Tone.Transport.timeSignature = measure.time_signature
             //     console.log('set time signature', measure.time_signature)
             // }
+
+            measureIndex++
         }
 
         Tone.Transport.schedule((time) => {
@@ -267,6 +327,19 @@ ClickTrack = class ClickTrack {
 
         // this.loop.start(0);
         Tone.Transport.start();
+    }
+
+    pause() {
+        this.audioButton.setAttribute('data-state', 'paused')
+        this.playing = false
+
+        if (this.audioTag && !this.audioTag.paused) {
+            console.log('audio paused')
+            // this.audioTag.playbackRate = 0.1
+            this.audioTag.pause()
+        }
+
+        Tone.Transport.pause()
     }
 
     stop() {
@@ -320,7 +393,7 @@ ClickTrack = class ClickTrack {
             });
             navigator.mediaSession.setActionHandler("pause", () => {
                 console.log('pause')
-                this.stop()
+                this.pause()
             });
             navigator.mediaSession.setActionHandler("stop", () => {
                 console.log('stop')

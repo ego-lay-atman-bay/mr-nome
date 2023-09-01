@@ -1131,6 +1131,6 @@ const audioPlayer = document.getElementById(button.getAttribute('aria-controls')
 
 let track = getTrackData()
 
-clickTrack = new ClickTrack(track, button, (clickTrack) => {
+var clickTrack = new ClickTrack(track, button, (clickTrack) => {
     clickTrack.data = getTrackData()
 })

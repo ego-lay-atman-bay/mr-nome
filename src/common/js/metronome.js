@@ -1,4 +1,6 @@
-// Tone = require('tone')
+if (false) {
+    Tone = require('tone')
+}
 
 Metronome = class Metronome {
     constructor(bpm, pattern, rhythm, audioButton) {
@@ -29,7 +31,7 @@ Metronome = class Metronome {
 
         this.audio = new Tone.Sampler({
             urls: {
-                "C4": "assets/sounds/gock block.mp3",
+                "C4": "../../assets/sounds/gock block.mp3",
             },
             release: 1,
             onload: () => {
