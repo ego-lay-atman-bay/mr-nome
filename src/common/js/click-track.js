@@ -137,12 +137,15 @@ ClickTrack = class ClickTrack {
 
         let measureIndex = 0
 
-        let repeats = {}
+        let lastMeasure = null
 
         for (let measureNumber = 0; measureNumber < this.data.measures.length; measureNumber++) {
             const measure = this.data.measures[measureNumber];
 
             Tone.Transport.schedule((time) => {
+                lastMeasure?.element?.classList.remove('selected')
+                measure.element?.classList.add('selected')
+
                 Tone.Transport.timeSignature = measure.time_signature
 
                 console.log('new time signature', measure.time_signature)
@@ -229,6 +232,8 @@ ClickTrack = class ClickTrack {
                     console.log('rampto', tempo.ending)
                     Tone.Transport.bpm.rampTo(tempo.ending, '1m')
                 }
+
+                lastMeasure = measure
             }, `0:${quarter_notes}`)
 
             for (let noteIndex = 0; noteIndex < measure.rhythm.length; noteIndex++) {
@@ -293,6 +298,7 @@ ClickTrack = class ClickTrack {
         }
 
         Tone.Transport.schedule((time) => {
+            lastMeasure?.element?.classList.remove('selected')
             this.stop()
         }, `0:${quarter_notes}`)
         Tone.Transport.timeSignature = this.data.measures[0].time_signature

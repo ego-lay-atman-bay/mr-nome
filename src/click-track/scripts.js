@@ -1075,7 +1075,7 @@ function createMeasure (data = {
 
 const SAVE_VERSION = 1
 
-function getTrackData () {
+function getTrackData (includeElements) {
     const measures = document.querySelectorAll('.track .measure:not([data-measure="add"])')
 
     let save = {
@@ -1098,6 +1098,10 @@ function getTrackData () {
                 starting: element.getAttribute('data-start-barline'),
                 ending: element.getAttribute('data-end-barline'),
             }
+        }
+
+        if (includeElements) {
+            measure.element = element
         }
 
         save.measures.push(measure)
@@ -1129,8 +1133,8 @@ function loadTrack (data) {
 const button = document.querySelector("#play-button");
 const audioPlayer = document.getElementById(button.getAttribute('aria-controls'))
 
-let track = getTrackData()
+let track = getTrackData(true)
 
 var clickTrack = new ClickTrack(track, button, (clickTrack) => {
-    clickTrack.data = getTrackData()
+    clickTrack.data = getTrackData(true)
 })
