@@ -619,6 +619,19 @@ measureEditorDialog.tempo.startTempo.addEventListener('input', function (e) {
     this.lastValue = this.value
 })
 
+measureEditorDialog.tempo.startNote.lastValue = measureEditorDialog.tempo.startNote.value
+
+measureEditorDialog.tempo.startNote.addEventListener('onchange', function (e) {
+    console.log('this', this)
+    console.log('value', this.value)
+
+    if (this.lastValue == measureEditorDialog.tempo.endNote.value) {
+        measureEditorDialog.tempo.endNote.value = this.value
+    }
+
+    this.lastValue = this.value
+})
+
 measureEditorDialog.timeSignature = {
     beatsPerMeasure: measureEditorDialog.querySelector('#editor-time-signature-beats-per-measure'),
     noteDuration: measureEditorDialog.querySelector('#editor-time-signature-note-duration'),

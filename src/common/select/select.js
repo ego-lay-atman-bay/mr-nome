@@ -6,6 +6,13 @@ function triggerOnchange (element) {
     }
     else
         element.fireEvent("onchange");
+
+    let event = new CustomEvent("onchange", {
+        bubbles: true,
+        detail: { text: 'onchange'},
+    });
+
+    element.dispatchEvent(event)
 }
 
 function findOverflowParents(element, initEl) {
@@ -35,11 +42,21 @@ function initMenu(element, options) {
     element.trigger = element.querySelector('.trigger')
     element._options = element.querySelector('.options')
 
-    element.getval = function() {
+    element.getVal = function() {
         return this.trigger.value || this.trigger.getAttribute('value')
     }
 
-    element.setval = function(value) {
+    Object.defineProperty(element, "value", {
+        get() {
+            return this.getVal()
+        },
+        
+        set(value) {
+            this.setVal(value)
+        }
+    });
+
+    element.setVal = function(value) {
         this.trigger.setAttribute('value', value)
 
         let prev = this._options.querySelector('.selected')
@@ -53,6 +70,10 @@ function initMenu(element, options) {
             this.trigger.innerHTML = newval.innerHTML
         }
         this.trigger.setAttribute('aria-expanded', 'false')
+
+        let onchange = element.trigger.getAttribute('onchange') ? element.trigger : element
+        console.log('onchange', onchange)
+        triggerOnchange(onchange)
     }
 
     element.getMenu = function () {
@@ -104,7 +125,7 @@ function initMenu(element, options) {
         });
 
         newOption.addEventListener('click', () => {
-            element.setval(newOption.getAttribute('value'))
+            element.setVal(newOption.getAttribute('value'))
             triggerOnchange(element.trigger)
         })
 
@@ -140,8 +161,7 @@ function initMenu(element, options) {
 
     for (const option of optionElements) {
         option.addEventListener('click', () => {
-            element.setval(option.getAttribute('value'))
-            triggerOnchange(element.trigger)
+            element.setVal(option.getAttribute('value'))
         })
     }
 
@@ -156,7 +176,6 @@ function initMenu(element, options) {
     })
 
     element.fixHeight()
-
 }
 
 const menus = document.querySelectorAll('.select');
