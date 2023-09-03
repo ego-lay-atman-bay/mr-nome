@@ -44,7 +44,9 @@ function init() {
     const button = document.querySelector("#play-button");
     const audioPlayer = document.getElementById(button.getAttribute('aria-controls'))
     
-    metronome = new Metronome(null, null, null, button);
+    metronome = new Metronome(null, null, null, button, {
+        'C4': './assets/sounds/gock block.mp3',
+    });
     let tempoDiv = document.querySelector('.tempo');
 
     // var tempoSliderChange = (e) => {

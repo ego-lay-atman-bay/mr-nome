@@ -1150,4 +1150,6 @@ let track = getTrackData(true)
 
 var clickTrack = new ClickTrack(track, button, (clickTrack) => {
     clickTrack.data = getTrackData(true)
+}, {
+    'C4': '../assets/sounds/gock block.mp3',
 })

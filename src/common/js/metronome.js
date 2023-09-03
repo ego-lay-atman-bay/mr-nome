@@ -3,7 +3,7 @@ if (false) {
 }
 
 Metronome = class Metronome {
-    constructor(bpm, pattern, rhythm, audioButton) {
+    constructor(bpm, pattern, rhythm, audioButton, metronomeSounds) {
         this.bpm = bpm || 120;
         this.pattern = pattern || [1, 0, 0, 0];
         this.rhythm = rhythm || [1, 1, 1, 1];
@@ -30,9 +30,7 @@ Metronome = class Metronome {
         this.setUpMediaAudio()
 
         this.audio = new Tone.Sampler({
-            urls: {
-                "C4": "../../assets/sounds/gock block.mp3",
-            },
+            urls: metronomeSounds,
             release: 1,
             onload: () => {
                 this.makeLoop();

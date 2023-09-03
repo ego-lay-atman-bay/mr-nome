@@ -33,7 +33,7 @@ ClickTrack = class ClickTrack {
         'e': 0.5,
     }
 
-    constructor(data, audioButton, buttonCallback) {
+    constructor(data, audioButton, buttonCallback, metronomeSounds) {
         this.data = data
 
         this.currentBeat = 0
@@ -57,9 +57,7 @@ ClickTrack = class ClickTrack {
         this.setUpMediaAudio()
 
         this.audio = new Tone.Sampler({
-            urls: {
-                "C4": "../../assets/sounds/gock block.mp3",
-            },
+            urls: metronomeSounds,
             release: 1,
             onload: () => {
                 this.makeTrack();
