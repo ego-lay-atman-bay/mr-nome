@@ -558,6 +558,8 @@ function renderMeasure(
 
     element.style.setProperty('width', stave.getWidth() + 'px')
     element.style.setProperty('height', '100px')
+
+    element.setAttribute('title', [null, 'add'].includes(measure) ? 'add measure' : `measure ${measure}`)
 }
 
 function modeCheck() {
@@ -1130,6 +1132,8 @@ function resetTrack () {
         element.remove()
     }
 }
+
+
 
 function loadTrack (data) {
     resetTrack()

@@ -3,7 +3,7 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
-<html>
+<html lang="en-us">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,12 +12,12 @@
         <meta name="name" content="Mr. Nome">
         <meta name="keywords" content="metronome, music">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="./common/dialog-polyfill/dialog-polyfill.css">
+        <link rel="stylesheet" href="./common/dialog-polyfill/dialog-polyfill.css" defer>
         <link rel="stylesheet" href="./common/css/common.css">
-        <link rel="stylesheet" href="./style.css">
+        <link rel="stylesheet" href="./style.css" defer>
         
-        <script src="./common/js/jquery-3.6.0.min.js"></script>
-        <script src="./common/js/Tone.js"></script>
+        <!-- <script src="./common/js/jquery-3.6.0.min.js"></script> -->
+        <script src="./common/js/Tone.js" defer></script>
 
         <script type="module" src="./common/js/common.js" defer></script>
         <script src="./common/js/metronome.js" defer></script>
@@ -27,6 +27,9 @@
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
+
+        <noscript><p>Javascript is required for this page. Please enable it.</p></noscript>
+
         
         <link rel="stylesheet" href="./common/navbar/navbar.css">
         <script src="./common/navbar/navbar.js" async defer></script>

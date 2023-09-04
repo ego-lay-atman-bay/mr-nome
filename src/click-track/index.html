@@ -3,7 +3,7 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
-<html>
+<html lang="en-us">
 
 <head>
     <meta charset="utf-8">
@@ -15,14 +15,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../common/dialog-polyfill/dialog-polyfill.css">
 
-    <link rel="stylesheet" href="../common/select/select.css">
+    <link rel="stylesheet" href="../common/select/select.css" defer>
     <link rel="stylesheet" href="../common/css/common.css">
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./style.css" defer>
+
+    <link rel="preload" as="font" href="../common/fonts/BravuraText.otf">
+    <link rel="preload" as="font" href="../common/fonts/BravuraText.woff">
 
 
-    <script src="../common/js/jquery-3.6.0.min.js"></script>
-    <script src="../common/js/vexflow-4.2.2.js"></script>
-    <script src="../common/js/Tone.js"></script>
+    <!-- <script src="../common/js/jquery-3.6.0.min.js"></script> -->
+    <script src="../common/js/vexflow-4.2.2.js" defer></script>
+    <script src="../common/js/Tone.js" defer></script>
     <script src="../common/js/click-track.js" defer></script>
 
     <script type="module" src="../common/js/common.js" defer></script>
@@ -34,23 +37,30 @@
     <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
+
+    <noscript><p>Javascript is required for this page. Please enable it.</p></noscript>
+
     <link rel="stylesheet" href="../common/navbar/navbar.css">
     <script src="../common/navbar/navbar.js" async defer></script>
     <nav id="primary-nav" class="primary-nav">
         <ul class="nav-links" id="nav-links">
             <li ontouchstart=""><a href="../" class="hover">Metronome</a></li>
-            <li ontouchstart=""><a href="" class="hover">Click Track</a></li>
+            <li ontouchstart=""><a href="#" class="hover">Click Track</a></li>
         </ul>
     </nav>
-
 
     <main class="content" id="content">
         <menu class="control-bar" id="control-bar">
             <div class="menu">
-                <button class="trigger" id="file-button" aria-controls="file-menu" aria-expanded="false">File</button>
+                <button class="option trigger" id="file-button" aria-controls="file-menu" aria-expanded="false">File</button>
                 <menu class="options" id="file-menu">
-                    <button class="option" value="new">New</button>
+                    <button class="option" value="new" onclick="resetTrack()">New</button>
                     <button class="option" value="save">Save</button>
+                    <button class="option" value="open">Open</button>
+                    <div class="sub">
+                        <button class="option" value="recent" id="recent-button" aria-controls="recent-menu" >Open Recent</button>
+                        <menu class="options" id="recent-menu"></menu>
+                    </div>
                 </menu>
             </div>
             <div class="menu">
@@ -70,7 +80,7 @@
             </div>
             <div id="player-controls">
                 <div class="play">
-                    <button class="play-button" id="play-button" aria-controls="play-button-audio"></button>
+                    <button title="play / pause" class="play-button" id="play-button" aria-controls="play-button-audio"></button>
                     <audio src="../assets/sounds/silence-10m.flac" id="play-button-audio"></audio>
                 </div>
                 <input type="checkbox" name="player-controls" id="player-count-in">
