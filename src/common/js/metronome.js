@@ -2,7 +2,7 @@ if (false) {
     Tone = require('tone')
 }
 
-Metronome = class Metronome {
+class Metronome {
     constructor(bpm, pattern, rhythm, audioButton, metronomeSounds) {
         this.bpm = bpm || 120;
         this.pattern = pattern || [1, 0, 0, 0];
@@ -205,3 +205,5 @@ Metronome = class Metronome {
         this.audioTag.playbackRate = 0
     }
 }
+
+export { Metronome }

@@ -3,7 +3,7 @@
  * Copyright (c) 2010 Mohit Muthanna Cheppudira <mohit@muthanna.com>
  * https://www.vexflow.com   https://github.com/0xfe/vexflow
  */
-! function(t, e) {
+! function (t, e) {
     "object" == typeof exports && "object" == typeof module ? module.exports = e() : "function" == typeof define && define.amd ? define([], e) : "object" == typeof exports ? exports.Vex = e() : t.Vex = e()
 }("undefined" != typeof window ? window : "undefined" != typeof globalThis ? globalThis : this, (() => (() => {
     "use strict";
@@ -15,7 +15,7 @@
             })
         }
     };
-    t.g = function() {
+    t.g = function () {
         if ("object" == typeof globalThis) return globalThis;
         try {
             return this || new Function("return this")()
@@ -198,7 +198,7 @@
         d = t => b(t, x.StemmableNote),
         _ = t => b(t, x.TabNote);
     var x;
-    ! function(t) {
+    ! function (t) {
         t.Accidental = "Accidental", t.Annotation = "Annotation", t.Articulation = "Articulation", t.Barline = "Barline", t.BarNote = "BarNote", t.Beam = "Beam", t.Bend = "Bend", t.ChordSymbol = "ChordSymbol", t.Clef = "Clef", t.ClefNote = "ClefNote", t.Crescendo = "Crescendo", t.Curve = "Curve", t.Dot = "Dot", t.Element = "Element", t.Fraction = "Fraction", t.FretHandFinger = "FretHandFinger", t.GhostNote = "GhostNote", t.Glyph = "Glyph", t.GlyphNote = "GlyphNote", t.GraceNote = "GraceNote", t.GraceNoteGroup = "GraceNoteGroup", t.GraceTabNote = "GraceTabNote", t.KeySignature = "KeySignature", t.KeySigNote = "KeySigNote", t.Modifier = "Modifier", t.MultiMeasureRest = "MultiMeasureRest", t.Note = "Note", t.NoteHead = "NoteHead", t.NoteSubGroup = "NoteSubGroup", t.Ornament = "Ornament", t.Parenthesis = "Parenthesis", t.PedalMarking = "PedalMarking", t.RenderContext = "RenderContext", t.RepeatNote = "RepeatNote", t.Repetition = "Repetition", t.Stave = "Stave", t.StaveConnector = "StaveConnector", t.StaveHairpin = "StaveHairpin", t.StaveLine = "StaveLine", t.StaveModifier = "StaveModifier", t.StaveNote = "StaveNote", t.StaveSection = "StaveSection", t.StaveTempo = "StaveTempo", t.StaveText = "StaveText", t.StaveTie = "StaveTie", t.Stem = "Stem", t.StemmableNote = "StemmableNote", t.StringNumber = "StringNumber", t.Stroke = "Stroke", t.System = "System", t.TabNote = "TabNote", t.TabSlide = "TabSlide", t.TabStave = "TabStave", t.TabTie = "TabTie", t.TextBracket = "TextBracket", t.TextDynamics = "TextDynamics", t.TextNote = "TextNote", t.Tickable = "Tickable", t.TimeSignature = "TimeSignature", t.TimeSigNote = "TimeSigNote", t.Tremolo = "Tremolo", t.Tuplet = "Tuplet", t.Vibrato = "Vibrato", t.VibratoBracket = "VibratoBracket", t.Voice = "Voice", t.Volta = "Volta"
     }(x || (x = {}));
     class g extends Error {
@@ -468,8 +468,8 @@
             }
         }
     }
-    var E, P, k = function(t, e, i, b) {
-        return new(i || (i = Promise))((function(a, n) {
+    var E, P, k = function (t, e, i, b) {
+        return new(i || (i = Promise))((function (a, n) {
             function s(t) {
                 try {
                     o(b.next(t))
@@ -488,7 +488,7 @@
 
             function o(t) {
                 var e;
-                t.done ? a(t.value) : (e = t.value, e instanceof i ? e : new i((function(t) {
+                t.done ? a(t.value) : (e = t.value, e instanceof i ? e : new i((function (t) {
                     t(e)
                 }))).then(s, l)
             }
@@ -496,18 +496,17 @@
         }))
     };
     let A;
-    ! function(t) {
+    ! function (t) {
         t.NORMAL = "normal", t.BOLD = "bold"
     }(E || (E = {})),
-    function(t) {
+    function (t) {
         t.NORMAL = "normal", t.ITALIC = "italic"
     }(P || (P = {}));
     const N = {};
     class F {
         static convertSizeToPixelValue(t = F.SIZE) {
             var e;
-            if ("number" == typeof t) return t * F.scaleToPxFrom.pt;
-            {
+            if ("number" == typeof t) return t * F.scaleToPxFrom.pt; {
                 const i = parseFloat(t);
                 if (isNaN(i)) return 0;
                 const b = t.replace(/[\d.\s]/g, "").toLowerCase();
@@ -516,8 +515,7 @@
         }
         static convertSizeToPointValue(t = F.SIZE) {
             var e;
-            if ("number" == typeof t) return t;
-            {
+            if ("number" == typeof t) return t; {
                 const i = parseFloat(t);
                 if (isNaN(i)) return 0;
                 const b = t.replace(/[\d.\s]/g, "").toLowerCase();
@@ -569,8 +567,7 @@
         }
         static isBold(t) {
             if (t) {
-                if ("number" == typeof t) return t >= 600;
-                {
+                if ("number" == typeof t) return t >= 600; {
                     const e = parseInt(t, 10);
                     return isNaN(e) ? "bold" === t.toLowerCase() : e >= 600
                 }
@@ -581,13 +578,13 @@
             return !!t && t.toLowerCase() === P.ITALIC
         }
         static loadWebFont(t, e, i = !0) {
-            return k(this, void 0, void 0, (function*() {
+            return k(this, void 0, void 0, (function* () {
                 const b = new FontFace(t, (i ? `url(${e}2) format('woff2'), ` : "") + `url(${e}) format('woff')`);
                 return yield b.load(), document.fonts.add(b), b
             }))
         }
         static loadWebFonts() {
-            return k(this, void 0, void 0, (function*() {
+            return k(this, void 0, void 0, (function* () {
                 const t = F.WEB_FONT_HOST,
                     e = F.WEB_FONT_FILES;
                 for (const i in e) {
@@ -3227,7 +3224,7 @@
         }
     };
     var $, J;
-    ! function(t) {
+    ! function (t) {
         t[t.MOVE = 0] = "MOVE", t[t.LINE = 1] = "LINE", t[t.QUADRATIC = 2] = "QUADRATIC", t[t.BEZIER = 3] = "BEZIER"
     }($ || ($ = {}));
     class q {
@@ -3471,7 +3468,7 @@
                 return void 0 === a && (a = new q(Z.MUSIC_FONT_STACK, t, e), i[b] = a), a
             }
         }, Z.CURRENT_CACHE_KEY = "", Z.MUSIC_FONT_STACK = [],
-        function(t) {
+        function (t) {
             t[t.CENTER = 0] = "CENTER", t[t.LEFT = 1] = "LEFT", t[t.RIGHT = 2] = "RIGHT", t[t.ABOVE = 3] = "ABOVE", t[t.BELOW = 4] = "BELOW"
         }(J || (J = {}));
     class tt extends R {
@@ -4293,7 +4290,7 @@
             let a = 0;
             b === at.DOWN ? (e = this.x_begin, i = this.y_top + this.stem_down_y_offset, a = this.stem_down_y_base_offset) : (e = this.x_end, i = this.y_bottom - this.stem_up_y_offset, a = this.stem_up_y_base_offset);
             const n = this.getHeight();
-            ! function(...t) {
+            ! function (...t) {
                 at.DEBUG && u("Vex.Flow.Stem", t)
             }("Rendering stem - ", "Top Y: ", this.y_top, "Bottom Y: ", this.y_bottom);
             const s = this.isStemlet ? n - this.stemletHeight * this.stem_direction : 0;
@@ -4437,10 +4434,10 @@
     }
     var ht, mt;
     rt.DEBUG = !1,
-        function(t) {
+        function (t) {
             t[t.LEFT = 1] = "LEFT", t[t.CENTER = 2] = "CENTER", t[t.RIGHT = 3] = "RIGHT", t[t.CENTER_STEM = 4] = "CENTER_STEM"
         }(ht || (ht = {})),
-        function(t) {
+        function (t) {
             t[t.TOP = 1] = "TOP", t[t.CENTER = 2] = "CENTER", t[t.BOTTOM = 3] = "BOTTOM", t[t.CENTER_STEM = 4] = "CENTER_STEM"
         }(mt || (mt = {}));
     class ct extends tt {
@@ -4529,7 +4526,7 @@
             } else {
                 const t = e.getStemExtents();
                 o = t.topY + (t.baseY - t.topY) / 2 + s / 2
-            }! function(...t) {
+            }! function (...t) {
                 ct.DEBUG && u("Vex.Flow.Annotation", t)
             }("Rendering annotation: ", this.text, l, o), t.fillText(this.text, l, o), t.closeGroup(), this.restoreStyle(), t.restore()
         }
@@ -4651,7 +4648,7 @@
                     x: h
                 } = e.getModifierStartXY(b, i),
                 m = !s || r,
-                c = function(t, e) {
+                c = function (t, e) {
                     const i = e === dt && t.getStemDirection() === at.UP || e === _t && t.getStemDirection() === at.DOWN;
                     return pt(t) ? t.hasStem() && i ? .5 : 1 : t.hasStem() && i ? 1 : 0
                 }(e, b),
@@ -4659,7 +4656,7 @@
             let x = {
                 [dt]: () => {
                     a.setOrigin(.5, 1);
-                    const t = function(t, e) {
+                    const t = function (t, e) {
                         const i = t.getStemDirection(),
                             {
                                 topY: b,
@@ -4673,7 +4670,7 @@
                 },
                 [_t]: () => {
                     a.setOrigin(.5, 0);
-                    const t = function(t, e) {
+                    const t = function (t, e) {
                         const i = t.getStemDirection(),
                             {
                                 topY: b,
@@ -4690,13 +4687,13 @@
                 const t = b === dt ? -1 : 1,
                     n = e.getKeyProps()[i].line,
                     l = (e.getYs()[i] - x) / o + Number(n),
-                    r = function(t, e, i, b) {
+                    r = function (t, e, i, b) {
                         const a = xt(yt(e, i), e);
                         if (t && gt(a, i) && a % 1 == 0) return a + .5 * -b;
                         return a
                     }(s, l, b, t);
                 gt(r, b) && a.setOrigin(.5, .5), x += Math.abs(r - l) * o * t + d * t
-            }! function(...t) {
+            }! function (...t) {
                 ut.DEBUG && u("Vex.Flow.Articulation", t)
             }(`Rendering articulation at (x: ${h}, y: ${x})`), a.render(t, h, x)
         }
@@ -5123,7 +5120,7 @@
         }
     }
     var wt, zt, Bt, Dt, Ct, Et;
-    ! function(t) {
+    ! function (t) {
         t[t.CENTER = 0] = "CENTER", t[t.LEFT = 1] = "LEFT", t[t.RIGHT = 2] = "RIGHT", t[t.ABOVE = 3] = "ABOVE", t[t.BELOW = 4] = "BELOW", t[t.BEGIN = 5] = "BEGIN", t[t.END = 6] = "END"
     }(wt || (wt = {}));
     class Pt extends R {
@@ -5179,7 +5176,7 @@
             return this.layoutMetrics
         }
         draw(...t) {}
-    }! function(t) {
+    }! function (t) {
         t[t.SINGLE = 1] = "SINGLE", t[t.DOUBLE = 2] = "DOUBLE", t[t.END = 3] = "END", t[t.REPEAT_BEGIN = 4] = "REPEAT_BEGIN", t[t.REPEAT_END = 5] = "REPEAT_END", t[t.REPEAT_BOTH = 6] = "REPEAT_BOTH", t[t.NONE = 7] = "NONE"
     }(zt || (zt = {}));
     class kt extends Pt {
@@ -5330,7 +5327,7 @@
         }
         draw() {
             const t = this.checkContext();
-            ! function(...t) {
+            ! function (...t) {
                 At.DEBUG && u("Vex.Flow.BarNote", t)
             }("Rendering bar line at: ", this.getAbsoluteX()), this.applyStyle(t);
             const e = new kt(this.type);
@@ -5449,16 +5446,16 @@
         Mt.DEBUG && u("Vex.Flow.ChordSymbol", t)
     }
     Nt.TEXT_FONT = Object.assign({}, R.TEXT_FONT),
-        function(t) {
+        function (t) {
             t[t.LEFT = 1] = "LEFT", t[t.CENTER = 2] = "CENTER", t[t.RIGHT = 3] = "RIGHT", t[t.CENTER_STEM = 4] = "CENTER_STEM"
         }(Bt || (Bt = {})),
-        function(t) {
+        function (t) {
             t[t.TOP = 1] = "TOP", t[t.BOTTOM = 2] = "BOTTOM"
         }(Dt || (Dt = {})),
-        function(t) {
+        function (t) {
             t[t.GLYPH = 1] = "GLYPH", t[t.TEXT = 2] = "TEXT", t[t.LINE = 3] = "LINE"
         }(Ct || (Ct = {})),
-        function(t) {
+        function (t) {
             t[t.NONE = 1] = "NONE", t[t.SUBSCRIPT = 2] = "SUBSCRIPT", t[t.SUPERSCRIPT = 3] = "SUPERSCRIPT"
         }(Et || (Et = {}));
     class Mt extends tt {
@@ -6124,7 +6121,7 @@
             let e = this.getAbsoluteX();
             this.custom_glyph && (e += this.stem_direction === at.UP ? this.stem_up_x_offset + (this.glyphProps.stem ? this.glyphProps.getWidth(this.render_options.glyph_font_scale) - this.width : 0) : this.stem_down_x_offset);
             const i = this.y;
-            ! function(...t) {
+            ! function (...t) {
                 Lt.DEBUG && u("Vex.Flow.NoteHead", t)
             }("Drawing note head '", this.noteType, this.duration, "' at", e, i);
             const b = this.stem_direction,
@@ -6132,7 +6129,7 @@
                 n = `${this.glyph_code}Stem${b===at.UP?"Up":"Down"}`;
             if ("s" === this.noteType) {
                 const a = this.checkStave().getSpacingBetweenLines();
-                ! function(t, e, i, b, a, n) {
+                ! function (t, e, i, b, a, n) {
                     const s = V.SLASH_NOTEHEAD_WIDTH;
                     t.save(), t.setLineWidth(V.STEM_WIDTH);
                     let l = !1;
@@ -6360,7 +6357,7 @@
             }
             if (!s) throw new g("InvalidState", "noteM not defined.");
             if (s.isrest && !n.isrest && !l.isrest && (n.minLine <= s.maxLine || s.minLine <= l.maxLine)) {
-                return s.maxLine - s.minLine < n.minLine - l.maxLine ? function(t, e, i) {
+                return s.maxLine - s.minLine < n.minLine - l.maxLine ? function (t, e, i) {
                     const b = t.line - S(e.minLine, i.maxLine);
                     t.note.setKeyLine(0, t.note.getKeyLine(0) - b), t.line -= b, t.maxLine -= b, t.minLine -= b
                 }(s, n, l) : (m = h + 2, s.note.setXShift(m), !1 === l.note.hasBeam() && (l.stemDirection = -1, l.note.setStemDirection(-1)), n.minLine <= l.maxLine && !1 === n.note.hasBeam() && (n.stemDirection = 1, n.note.setStemDirection(1))), e.right_shift += m, !0
@@ -6755,7 +6752,7 @@
             if (this._noteHeads.forEach((t => t.setX(e))), this.stem) {
                 const t = this.getStemX();
                 this.stem.setNoteHeadXBounds(t, t)
-            }! function(...t) {
+            }! function (...t) {
                 It.DEBUG && u("Vex.Flow.StaveNote", t)
             }("Rendering ", this.isChord() ? "chord :" : "note :", this.keys), this.applyStyle(), t.openGroup("stavenote", this.getAttribute("id")), this.drawLedgerLines(), i && this.drawStem(), this.drawNoteHeads(), this.drawFlag(), t.closeGroup(), this.restoreStyle(), this.setRendered()
         }
@@ -6864,7 +6861,7 @@
         }
     }
     var Yt;
-    ! function(t) {
+    ! function (t) {
         t[t.STRICT = 1] = "STRICT", t[t.SOFT = 2] = "SOFT", t[t.FULL = 3] = "FULL"
     }(Yt || (Yt = {}));
     class Xt extends R {
@@ -7056,7 +7053,7 @@
         draw() {
             const t = this.checkContext(),
                 e = this.checkAttachedNote();
-            if (this.setRendered(), function(...t) {
+            if (this.setRendered(), function (...t) {
                     jt.DEBUG && u("Vex.Flow.GraceNoteGroup", t)
                 }("Drawing grace note group for:", e), this.alignSubNotesWithNote(this.getGraceNotes(), e), this.grace_notes.forEach((e => e.setContext(t).draw())), this.beams.forEach((e => e.setContext(t).draw())), this.show_slur) {
                 const i = c(e),
@@ -7321,7 +7318,7 @@
                     t += a ? .5 * (a.getX() - i) : .5 * (b.getX() + b.getWidth() - i), this.delayXShift = t
                 }
                 m += t
-            }! function(...t) {
+            }! function (...t) {
                 $t.DEBUG && u("Vex.Flow.Ornament", t)
             }("Rendering ornament: ", this.ornament, m, c), this.accidentalLower && (this.accidentalLower.render(t, m, c), c -= this.accidentalLower.getMetrics().height, c -= this.render_options.accidentalLowerPadding), this.stemUpYOffset && e.hasStem() && 1 === e.getStemDirection() && (c += this.stemUpYOffset), e.getLineNumber() < 5 && $t.ornamentNoteTransition.indexOf(this.type) >= 0 && (c = e.checkStave().getBoundingBox().getY() + 40), this.glyph.render(t, m + this.x_shift, c), this.accidentalUpper && (c -= this.glyph.getMetrics().height + this.render_options.accidentalUpperPadding, this.accidentalUpper.render(t, m, c)), t.closeGroup(), this.restoreStyle()
         }
@@ -7826,10 +7823,10 @@
                 }
             }
         },
-        function(t) {
+        function (t) {
             t[t.CANVAS = 1] = "CANVAS", t[t.SVG = 2] = "SVG"
         }(ae || (ae = {})),
-        function(t) {
+        function (t) {
             t[t.NONE = 1] = "NONE", t[t.UP = 2] = "UP", t[t.DOWN = 3] = "DOWN"
         }(ne || (ne = {}));
     class oe {
@@ -8342,7 +8339,7 @@
         }
         constructor(t, e, i) {
             super(), this.clef = _e.types.treble, this.setPosition(wt.BEGIN), this.setType(t, e, i), this.setWidth(Z.getWidth(this.clef.code, _e.getPoint(this.size), `clef_${this.size}`)),
-                function(...t) {
+                function (...t) {
                     _e.DEBUG && u("Vex.Flow.Clef", t)
                 }("Creating clef:", t)
         }
@@ -8771,7 +8768,7 @@
             weight: E.BOLD,
             style: P.NORMAL
         },
-        function(t) {
+        function (t) {
             t[t.LEFT = 1] = "LEFT", t[t.CENTER = 2] = "CENTER", t[t.RIGHT = 3] = "RIGHT"
         }(se || (se = {}));
     class ue extends vt {
@@ -8949,7 +8946,7 @@
             weight: E.NORMAL,
             style: P.NORMAL
         },
-        function(t) {
+        function (t) {
             t[t.NONE = 1] = "NONE", t[t.BEGIN = 2] = "BEGIN", t[t.MID = 3] = "MID", t[t.END = 4] = "END", t[t.BEGIN_END = 5] = "BEGIN_END"
         }(le || (le = {}));
     class Se extends Pt {
@@ -9843,7 +9840,7 @@
             })
         }
         createTickContexts(t) {
-            const e = function(t, e, i) {
+            const e = function (t, e, i) {
                 if (0 == t.length) return {
                     map: {},
                     array: [],
@@ -10042,7 +10039,7 @@
                         r = e.getX() - i.modLeftPx - i.leftDisplacedHeadPx - o, l.space.used = e.getX() - t.getX(), e.getFormatterMetrics().freedom.left = r
                     } else r = e - o, l.space.used = e - t.getX();
                     l.freedom.right = r,
-                        function(t, e) {
+                        function (t, e) {
                             const b = i[t];
                             void 0 === b ? i[t] = {
                                 mean: e,
@@ -10070,7 +10067,7 @@
                 const s = i.map[t],
                     l = e > 0 ? i.map[n[e - 1]] : void 0,
                     o = e < n.length - 1 ? i.map[n[e + 1]] : void 0;
-                ! function(t, e, i, b) {
+                ! function (t, e, i, b) {
                     t.setX(t.getX() + e), t.getFormatterMetrics().freedom.left += e, t.getFormatterMetrics().freedom.right -= e, i && (i.getFormatterMetrics().freedom.right += e), b && (b.getFormatterMetrics().freedom.left -= e)
                 }(s, a, l, o);
                 const r = -w(s.getTickables().map((t => t.getFormatterMetrics().space.deviation)));
@@ -10100,7 +10097,7 @@
                     context: e.getContext()
                 }, i),
                 a = e.getNoteEndX() - e.getNoteStartX() - Be.defaultPadding;
-            return function(...t) {
+            return function (...t) {
                 Pe.DEBUG && u("Vex.Flow.Formatter", t)
             }("Formatting voices to width: ", a), this.format(t, a, b)
         }
@@ -10111,7 +10108,7 @@
     }
     var ke;
     Pe.DEBUG = !1,
-        function(t) {
+        function (t) {
             t[t.BOTTOM = -1] = "BOTTOM", t[t.TOP = 1] = "TOP"
         }(ke || (ke = {}));
     class Ae extends R {
@@ -10294,8 +10291,7 @@
                 "3/16": ["3/16"],
                 "4/16": ["2/16"]
             } [t];
-            if (void 0 !== e) return e.map((t => (new z).parse(t)));
-            {
+            if (void 0 !== e) return e.map((t => (new z).parse(t))); {
                 const e = parseInt(t.split("/")[0], 10),
                     i = parseInt(t.split("/")[1], 10);
                 if (e % 3 == 0) return [new z(3, i)];
@@ -10323,7 +10319,7 @@
 
             function l() {
                 i.length - 1 > a ? a += 1 : a = 0
-            }! function() {
+            }! function () {
                 let t = [],
                     e = new z(0, 1);
                 b.forEach((b => {
@@ -10346,7 +10342,7 @@
                     } else r.equals(o) && (n.push(s), e = new z(0, 1), s = t, l())
                 })), s.length > 0 && n.push(s)
             }(),
-            function() {
+            function () {
                 const t = [];
                 n.forEach((i => {
                     let b = [];
@@ -10367,7 +10363,7 @@
             }(), n.forEach((t => {
                 let i;
                 if (e.maintain_stem_directions) {
-                    const e = function(t) {
+                    const e = function (t) {
                         for (let e = 0; e < t.length; e++) {
                             const i = t[e];
                             if (!i.isRest()) return i
@@ -10376,7 +10372,7 @@
                     }(t);
                     i = e ? e.getStemDirection() : at.UP
                 } else i = e.stem_direction ? e.stem_direction : Ne(t);
-                ! function(t, e) {
+                ! function (t, e) {
                     t.forEach((t => {
                         t.setStemDirection(e)
                     }))
@@ -10391,7 +10387,7 @@
                     }
                     return !1
                 })),
-                r = function() {
+                r = function () {
                     const t = [];
                     return n.forEach((e => {
                         let i;
@@ -10472,7 +10468,7 @@
                     slope_iterations: a,
                     slope_cost: n
                 }
-            } = this, s = t[0], l = function(t, e) {
+            } = this, s = t[0], l = function (t, e) {
                 const i = t.getStemExtents().topY,
                     b = t.getStemX();
                 return (e.getStemExtents().topY - i) / (e.getStemX() - b)
@@ -10636,8 +10632,7 @@
                         s = i.start,
                         o = this.getSlopeY(s, a, b, this.slope),
                         r = i.end;
-                    if (!r) throw new g("NoLastBeamX", "lastBeamX undefined.");
-                    {
+                    if (!r) throw new g("NoLastBeamX", "lastBeamX undefined."); {
                         const e = this.getSlopeY(r, a, b, this.slope);
                         t.beginPath(), t.moveTo(s, o), t.lineTo(s, o + n), t.lineTo(r + 1, e + n), t.lineTo(r + 1, e), t.closePath(), t.fill()
                     }
@@ -10723,10 +10718,10 @@
                 a = this.getAbsoluteX(),
                 n = b ? b.getX() : e.getX() + e.getWidth(),
                 s = e.getYForLine(this.line + -3) + 1;
-            ! function(...t) {
+            ! function (...t) {
                 We.DEBUG && u("Vex.Flow.Crescendo", t)
             }("Drawing ", this.decrescendo ? "decrescendo " : "crescendo ", this.height, "x", a - n),
-            function(t, e) {
+            function (t, e) {
                 const i = e.begin_x,
                     b = e.end_x,
                     a = e.y,
@@ -10743,7 +10738,7 @@
     }
     var Ue;
     We.DEBUG = !1,
-        function(t) {
+        function (t) {
             t[t.NEAR_HEAD = 1] = "NEAR_HEAD", t[t.NEAR_TOP = 2] = "NEAR_TOP"
         }(Ue || (Ue = {}));
     class Ie extends R {
@@ -11580,7 +11575,7 @@
                 o = s % 2,
                 r = this.render_options;
             ai = void 0;
-            const h = function() {
+            const h = function () {
                     if (!ai) {
                         const t = new Lt({
                             duration: "w",
@@ -11715,7 +11710,7 @@
         draw() {
             const t = this.checkContext();
             this.setRendered(), t.save(), t.setStrokeStyle(this.render_options.color), t.setFillStyle(this.render_options.color), t.setFont(this.textFont),
-                function(...t) {
+                function (...t) {
                     li.DEBUG && u("Vex.Flow.PedalMarking", t)
                 }("Rendering Pedal Marking"), this.type === li.type.BRACKET || this.type === li.type.MIXED ? (t.setLineWidth(this.render_options.bracket_line_width), this.drawBracketed()) : this.type === li.type.TEXT && this.drawText(), t.restore()
         }
@@ -12099,7 +12094,7 @@
                 b = this.render_options.draw_stem,
                 a = this.render_options.draw_stem_through_stave;
             if (b && a) {
-                const b = function(t, e, i, b) {
+                const b = function (t, e, i, b) {
                     const a = 1 !== b,
                         n = -1 !== b,
                         s = i.getSpacingBetweenLines(),
@@ -12118,7 +12113,7 @@
                             0 !== a || o ? a !== n.length - 1 || r || (h += s / 2 - 1) : h -= s / 2 - 1, m.push(h), 1 === b && o ? m.push(t - 2) : -1 === b && r && m.push(t + 2)
                         })), o.push(m.sort(((t, e) => t - e)))
                     })), o
-                }(e, function(t, e) {
+                }(e, function (t, e) {
                     const i = [];
                     let b = [];
                     for (let a = 1; a <= t; a++) e.indexOf(a) > -1 ? (i.push(b), b = []) : b.push(a);
@@ -12183,7 +12178,7 @@
         yi.DEBUG && u("Vex.Flow.TextBracket", t)
     }
     var gi;
-    ! function(t) {
+    ! function (t) {
         t[t.TOP = 1] = "TOP", t[t.BOTTOM = -1] = "BOTTOM"
     }(gi || (gi = {}));
     class yi extends R {
@@ -12403,7 +12398,7 @@
                 i = this.start && this.start.getAbsoluteX() || this.stop && this.stop.checkStave().getTieStartX() || 0,
                 b = this.stop && this.stop.getAbsoluteX() - this.stop.getWidth() - 5 || this.start && this.start.checkStave().getTieEndX() - 10 || 0;
             this.render_options.vibrato_width = b - i,
-                function(...t) {
+                function (...t) {
                     Si.DEBUG && u("Vex.Flow.VibratoBracket", t)
                 }("Rendering VibratoBracket: start_x:", i, "stop_x:", b, "y:", e), me.renderVibrato(t, i, e, this.render_options)
         }
@@ -13006,8 +13001,8 @@
             return `${V.integerToNote(a)}/${b}`
         }
     }
-    var Pi = function(t, e, i, b) {
-        return new(i || (i = Promise))((function(a, n) {
+    var Pi = function (t, e, i, b) {
+        return new(i || (i = Promise))((function (a, n) {
             function s(t) {
                 try {
                     o(b.next(t))
@@ -13026,7 +13021,7 @@
 
             function o(t) {
                 var e;
-                t.done ? a(t.value) : (e = t.value, e instanceof i ? e : new i((function(t) {
+                t.done ? a(t.value) : (e = t.value, e instanceof i ? e : new i((function (t) {
                     t(e)
                 }))).then(s, l)
             }
@@ -13046,7 +13041,7 @@
             return V.MUSIC_FONT_STACK = e, Z.MUSIC_FONT_STACK = e.slice(), Z.CURRENT_CACHE_KEY = t.join(","), e
         }
         static fetchMusicFont(t, e) {
-            return Pi(this, void 0, void 0, (function*() {}))
+            return Pi(this, void 0, void 0, (function* () {}))
         }
         static getMusicFont() {
             return V.MUSIC_FONT_STACK.map((t => t.getName()))
@@ -25494,12 +25489,12 @@
         }
     }
     return Yi.Flow = ki, F.load("Bravura", Ai, Ni), F.load("Gonville", Mi, Ni),
-        function() {
+        function () {
             const t = JSON.parse(JSON.stringify(Ni)),
                 e = t.chordSymbol;
             e && (e.glyphs = Li), F.load("Petaluma", Ri, t)
         }(), F.load("Custom", Fi, Ni), F.load("Leland", Oi, Ni), ki.setMusicFont("Bravura", "Gonville", "Custom"),
-        function() {
+        function () {
             {
                 const t = Ii,
                     {

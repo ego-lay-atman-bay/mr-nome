@@ -1,8 +1,6 @@
-if (false) {
-    const Tone = require('tone/build/esm/core/Tone')
-}
+import './Tone.js'
 
-ClickTrack = class ClickTrack {
+class ClickTrack {
     NOTE_NAMES = {
         1: '1n',
         2: '2n',
@@ -147,7 +145,7 @@ ClickTrack = class ClickTrack {
                 Tone.Transport.timeSignature = measure.time_signature
 
                 console.log('new time signature', measure.time_signature)
-                
+
                 console.log('measureNumber', measureNumber)
 
                 let tempo = {
@@ -155,7 +153,7 @@ ClickTrack = class ClickTrack {
                         if (m === measure) {
                             return m.tempo.starting
                         }
-                
+
                         if (m.tempo.ending) {
                             return m.tempo.ending
                         } else {
@@ -265,13 +263,13 @@ ClickTrack = class ClickTrack {
                 if (measure.repeat == undefined ) {
                     measure.repeat = 2
                 }
-                
+
                 measure.repeat -= 1
 
                 if (measure.repeat < 0) {
                     measure.repeat = 1
                 }
-                
+
                 if (measure.repeat > 0) {
                     let repeatStart = this.getLastMeasureInfo(measureNumber, (measure, index, check) => {
                         if (measure.barline.starting == 4 || index == 0) {
@@ -282,11 +280,11 @@ ClickTrack = class ClickTrack {
                     })
 
                     measureNumber = repeatStart - 1
-                    
+
                 }
 
             }
-            
+
             // if (measure.time_signature) {
             //     Tone.Transport.timeSignature = measure.time_signature
             //     console.log('set time signature', measure.time_signature)
@@ -430,7 +428,7 @@ ClickTrack = class ClickTrack {
             document.body.appendChild(this.audioTag)
             this.audioTag.src = "assets/sounds/silence-10m.flac"
         }
-        
+
         // this.audioTag.addEventListener('seeked', (e) => {
         //     console.log('audio seek')
         //     if (this.audioTag.currentTime == 0) {
@@ -447,3 +445,5 @@ ClickTrack = class ClickTrack {
         // this.audioTag.playbackRate = 0
     }
 }
+
+export { ClickTrack }

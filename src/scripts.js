@@ -1,3 +1,5 @@
+import './common/js/Tone.js'
+import { Metronome } from "./common/js/metronome.js";
 
 function onRangeChange(rangeInputElmt, listener) {
     // code by Andrew Willems https://stackoverflow.com/a/37623959/17129659
@@ -44,7 +46,7 @@ function init() {
     const button = document.querySelector("#play-button");
     const audioPlayer = document.getElementById(button.getAttribute('aria-controls'))
     
-    metronome = new Metronome(null, null, null, button, {
+    let metronome = new Metronome(null, null, null, button, {
         'C4': './assets/sounds/gock block.mp3',
     });
     let tempoDiv = document.querySelector('.tempo');

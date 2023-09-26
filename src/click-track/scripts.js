@@ -1,3 +1,7 @@
+import { download } from "../common/js/file-saver.js";
+import { ClickTrack } from "../common/js/click-track.js";
+import "../common/js/vexflow.js";
+
 const {
     Renderer,
     RenderContext,
@@ -13,7 +17,7 @@ const {
     BarlineType,
 } = Vex.Flow;
 
-measureWidth = 150
+const measureWidth = 150
 document.documentElement.style.setProperty('--measure-width', measureWidth + 'px')
 
 function findClosest(number, array) {
@@ -150,7 +154,7 @@ function renderMeasure(
         tempo.starting_note = 'q'
         tempo.starting_note_dots = 0
 
-        starting_note = getLastMeasureInfo(element, (m, check) => {
+        let starting_note = getLastMeasureInfo(element, (m, check) => {
             if (m === element) {
                 return m.getAttribute('data-starting-tempo-note')
             }
@@ -185,7 +189,7 @@ function renderMeasure(
         tempo.ending_note = 'q'
         tempo.ending_note_dots = 0
 
-        ending_note = getLastMeasureInfo(element, (m, check) => {
+        let ending_note = getLastMeasureInfo(element, (m, check) => {
             if (m.getAttribute('data-ending-tempo-note')) {
                 return m.getAttribute('data-ending-tempo-note')
             } else {
@@ -425,7 +429,7 @@ function renderMeasure(
     // // A C-Major chord.
     // new StaveNote({ keys: ["b/4"], duration: "q" }),
 
-    beat_value = timeSig.beat_value
+    let beat_value = timeSig.beat_value
 
     if (NOTE_NAMES[beat_value] == undefined) {
         beat_value = 8
@@ -579,7 +583,7 @@ function modeCheck() {
     return mode
 }
 
-getLastMeasureInfo = function (measure, callback = (measure, check) => {
+function getLastMeasureInfo (measure, callback = (measure, check) => {
     return measure.getAttribute('data-starting-bpm')
 }) {
     if (!measure) {
@@ -590,7 +594,7 @@ getLastMeasureInfo = function (measure, callback = (measure, check) => {
         return callback(measure, true)
     }
 
-    previousSibling = measure.previousElementSibling
+    let previousSibling = measure.previousElementSibling
 
     if (!previousSibling) {
         return callback(measure, true)
@@ -640,9 +644,9 @@ measureEditorDialog.timeSignature = {
 }
 measureEditorDialog.rhythm = measureEditorDialog.querySelector('#editor-rhythm')
 measureEditorDialog.updateBeats = function () {
-    beatsPerMeasure = this.timeSignature.beatsPerMeasure.value
+    let beatsPerMeasure = this.timeSignature.beatsPerMeasure.value
 
-    notes = this.rhythm.children
+    let notes = this.rhythm.children
 
     if (beatsPerMeasure > notes.length) {
         let addAmount = beatsPerMeasure - notes.length
@@ -762,7 +766,7 @@ measureEditorDialog.edit = function (measure, adding = false) {
         end: measure.getAttribute('data-end-barline'),
     }
 
-    
+
     if (!barline.start) {
         barline.start = 1
     }
@@ -867,7 +871,7 @@ measureEditorDialog.edit = function (measure, adding = false) {
                 rhythm.push(note.value)
             }
 
-            rhythmText = rhythm.join(',')
+            let rhythmText = rhythm.join(',')
 
             let lastStartTempo = getLastMeasureInfo(previousMeasure, (m, check) => {
                 if (m === measure) {
@@ -885,7 +889,7 @@ measureEditorDialog.edit = function (measure, adding = false) {
                 if (m === measure) {
                     return m.getAttribute('data-starting-tempo-note')
                 }
-        
+
                 if (m.getAttribute('data-ending-tempo-note')) {
                     return m.getAttribute('data-ending-tempo-note')
                 } else {
@@ -893,7 +897,7 @@ measureEditorDialog.edit = function (measure, adding = false) {
                 }
             })
 
-            
+
             let startBarlineSelection = this.querySelector(`input[name="editor-start-barline"]:checked`)
             let endBarlineSelection = this.querySelector(`input[name="editor-end-barline"]:checked`)
 
@@ -1055,7 +1059,7 @@ function createMeasure (data = {
 }) {
     let measure = document.createElement('button')
     measure.classList.add('measure')
-    
+
     const track = document.querySelector('#track')
     const measureAdder = track.querySelector('[data-measure="add"]')
 
@@ -1133,7 +1137,7 @@ function resetTrack () {
     }
 }
 
-
+window.resetTrack = resetTrack
 
 function loadTrack (data) {
     resetTrack()
@@ -1156,4 +1160,32 @@ var clickTrack = new ClickTrack(track, button, (clickTrack) => {
     clickTrack.data = getTrackData(true)
 }, {
     'C4': '../assets/sounds/gock block.mp3',
+})
+
+let save_button = document.querySelector('.control-bar [value="save"]')
+console.log('save_button', save_button)
+save_button.addEventListener('click', () => {
+    download(JSON.stringify(getTrackData(false)), 'track.json', 'application/json')
+})
+
+let open_button = document.querySelector('#open-file')
+open_button.addEventListener('change', async (event) => {
+    let file_selector = event.target
+    let files = event.target.files
+    console.log('files:', files)
+
+    let file = files[0]
+    console.log('file', file)
+    if (file) {
+        let content = await file.text()
+        try {
+            let json = JSON.parse(content)
+            console.log(json)
+            loadTrack(json)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    file_selector.value = ''
 })

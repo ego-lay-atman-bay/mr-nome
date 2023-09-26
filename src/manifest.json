@@ -1,0 +1,16 @@
+{
+    "name": "Mr. Nome",
+    "short_name": "Mr. Nome",
+    "description": "Mr. Nome is an advanced online metronome app.",
+    "icons": [{
+        "src": "./assets/icons/icon-144px.png",
+        "sizes": "144x144",
+        "type": "image/png"
+      }
+    ],
+    "lang": "en-US",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "white",
+    "theme_color": "white"
+}

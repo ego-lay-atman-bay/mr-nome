@@ -12,16 +12,21 @@
         <meta name="name" content="Mr. Nome">
         <meta name="keywords" content="metronome, music">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="manifest" href="manifest.json">
+
         <link rel="stylesheet" href="./common/dialog-polyfill/dialog-polyfill.css" defer>
         <link rel="stylesheet" href="./common/css/common.css">
         <link rel="stylesheet" href="./style.css" defer>
         
         <!-- <script src="./common/js/jquery-3.6.0.min.js"></script> -->
-        <script src="./common/js/Tone.js" defer></script>
 
         <script type="module" src="./common/js/common.js" defer></script>
-        <script src="./common/js/metronome.js" defer></script>
-    <script src="./scripts.js" defer></script>
+        <script type="module" src="./scripts.js" async defer></script>
+        <script src="./common/js/register-sw.js"></script>
+        <script>
+            console.log('register service worker')
+            registerServiceWorker('./sw.js')
+        </script>
     </head>
     <body>
         <!--[if lt IE 7]>
