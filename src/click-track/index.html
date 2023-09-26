@@ -13,9 +13,26 @@
     <meta name="name" content="Mr. Nome">
     <link rel="manifest" href="../manifest.json">
 
+    <script>
+        is_localhost: Boolean(
+        window.location.hostname === 'localhost' ||
+        // [::1] is the IPv6 localhost address.
+        window.location.hostname === '[::1]' ||
+        // 127.0.0.1/8 is considered localhost for IPv4.
+        RegExp([
+        '^([a-z0-9\\.\\-_%]+:([a-z0-9\\.\\-_%])+?@)?',
+        '((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\\.){3}(25[0-5]|2[0-4',
+        '][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])?',
+        '(:[0-9]+)?(\/[^\\s]*)?$'
+        ].join(''), 'i').test(window.location.hostname)
+        )
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
     <script>
-        eruda.init();
+        if (is_localhost) {
+            eruda.init();
+        }
     </script>
 
     <meta name="keywords" content="metronome, music">
