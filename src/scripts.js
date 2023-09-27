@@ -1,6 +1,8 @@
 import './common/js/Tone.js'
 import { Metronome } from "./common/js/metronome.js";
 
+var metronome;
+
 function onRangeChange(rangeInputElmt, listener) {
     // code by Andrew Willems https://stackoverflow.com/a/37623959/17129659
 
@@ -45,8 +47,8 @@ function setTempo(bpm) {
 function init() {
     const button = document.querySelector("#play-button");
     const audioPlayer = document.getElementById(button.getAttribute('aria-controls'))
-    
-    let metronome = new Metronome(null, null, null, button, {
+
+    metronome = new Metronome(null, null, null, button, {
         'C4': './assets/sounds/gock block.mp3',
     });
     let tempoDiv = document.querySelector('.tempo');
@@ -129,9 +131,9 @@ function options () {
     })
 
     function submit () {
-        
+
         metronome.timeSig = timeSig
-            
+
         let pattern = []
         for (let i = 0; i < timeSig[0]; i++) {
             if (i == 0) {
@@ -205,6 +207,13 @@ function tapBeat() {
             taps += 1
         }
 
+    })
+
+    document.addEventListener('click', (event) => {
+        console.log('clicked', event.target)
+        if (event.target != button) {
+            taps = 0
+        }
     })
 }
 

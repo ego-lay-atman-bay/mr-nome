@@ -135,7 +135,9 @@ class Metronome {
 
     getArtist() {
         let artist = `tempo: ${this.bpm}`
-        navigator.mediaSession.metadata.artist = artist
+        if (navigator.mediaSession.metadata) {
+            navigator.mediaSession.metadata.artist = artist
+        }
         return artist
     }
 
@@ -188,7 +190,7 @@ class Metronome {
             document.body.appendChild(this.audioTag)
             this.audioTag.src = "assets/sounds/silence-10m.flac"
         }
-        
+
         this.audioTag.addEventListener('seeked', (e) => {
             console.log('audio seek')
             if (this.audioTag.currentTime == 0) {
