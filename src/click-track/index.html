@@ -14,17 +14,17 @@
     <link rel="manifest" href="../manifest.json">
 
     <script>
-        is_localhost: Boolean(
-        window.location.hostname === 'localhost' ||
-        // [::1] is the IPv6 localhost address.
-        window.location.hostname === '[::1]' ||
-        // 127.0.0.1/8 is considered localhost for IPv4.
-        RegExp([
-        '^([a-z0-9\\.\\-_%]+:([a-z0-9\\.\\-_%])+?@)?',
-        '((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\\.){3}(25[0-5]|2[0-4',
-        '][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])?',
-        '(:[0-9]+)?(\/[^\\s]*)?$'
-        ].join(''), 'i').test(window.location.hostname)
+        var is_localhost = Boolean(
+            window.location.hostname === 'localhost' ||
+            // [::1] is the IPv6 localhost address.
+            window.location.hostname === '[::1]' ||
+            // 127.0.0.1/8 is considered localhost for IPv4.
+            RegExp([
+                '^([a-z0-9\\.\\-_%]+:([a-z0-9\\.\\-_%])+?@)?',
+                '((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\\.){3}(25[0-5]|2[0-4',
+                '][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])?',
+                '(:[0-9]+)?(\/[^\\s]*)?$'
+            ].join(''), 'i').test(window.location.hostname)
         )
     </script>
 
@@ -66,7 +66,9 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-    <noscript><p>Javascript is required for this page. Please enable it.</p></noscript>
+    <noscript>
+        <p>Javascript is required for this page. Please enable it.</p>
+    </noscript>
 
     <link rel="stylesheet" href="../common/navbar/navbar.css">
     <script src="../common/navbar/navbar.js" async defer></script>
@@ -77,19 +79,21 @@
         </ul>
     </nav>
 
-    <a href="" ></a>
+    <a href=""></a>
 
     <main class="content" id="content">
         <menu class="control-bar" id="control-bar">
             <div class="menu">
-                <button class="option trigger" id="file-button" aria-controls="file-menu" aria-expanded="false">File</button>
+                <button class="option trigger" id="file-button" aria-controls="file-menu"
+                    aria-expanded="false">File</button>
                 <menu class="options" id="file-menu">
                     <button class="option" value="new" onclick="resetTrack()">New</button>
                     <button class="option" value="save">Save</button>
                     <label class="option" for="open-file">Open</label>
                     <input class="option hidden" type="file" name="open-file" id="open-file" accept=".json">
                     <div class="sub">
-                        <button class="option" value="recent" id="recent-button" aria-controls="recent-menu" >Open Recent</button>
+                        <button class="option" value="recent" id="recent-button" aria-controls="recent-menu">Open
+                            Recent</button>
                         <menu class="options" id="recent-menu"></menu>
                     </div>
                 </menu>
@@ -111,7 +115,8 @@
             </div>
             <div id="player-controls">
                 <div class="play">
-                    <button title="play / pause" class="play-button" id="play-button" aria-controls="play-button-audio"></button>
+                    <button title="play / pause" class="play-button" id="play-button"
+                        aria-controls="play-button-audio"></button>
                     <audio src="../assets/sounds/silence-10m.flac" id="play-button-audio"></audio>
                 </div>
                 <input type="checkbox" name="player-controls" id="player-count-off">
@@ -122,62 +127,32 @@
             </div>
         </menu>
         <div class="track" id="track">
-            <button class="measure" id="measure-1"
-                data-measure="1"
-                data-starting-bpm="120" data-ending-bpm=""
-                data-starting-tempo-note="q" data-ending-tempo-note=""
-                data-start-barline="4"
-                data-end-barline="3"
-                data-tempo-measure-span="1"
-                data-time-signature="4/4"
-                data-rhythm="2,1,1,1">
+            <button class="measure" id="measure-1" data-measure="1" data-starting-bpm="120" data-ending-bpm=""
+                data-starting-tempo-note="q" data-ending-tempo-note="" data-start-barline="4" data-end-barline="3"
+                data-tempo-measure-span="1" data-time-signature="4/4" data-rhythm="2,1,1,1">
             </button>
 
-            <button class="measure" id="measure-2"
-                data-measure="2"
-                data-starting-bpm="" data-ending-bpm=""
-                data-starting-tempo-note="q" data-ending-tempo-note="q"
-                data-start-barline="1"
-                data-end-barline="1"
-                data-tempo-measure-span="2"
-                data-time-signature="5/4"
-                data-rhythm="2,1,1,1,1">
+            <button class="measure" id="measure-2" data-measure="2" data-starting-bpm="" data-ending-bpm=""
+                data-starting-tempo-note="q" data-ending-tempo-note="q" data-start-barline="1" data-end-barline="1"
+                data-tempo-measure-span="2" data-time-signature="5/4" data-rhythm="2,1,1,1,1">
             </button>
 
-            <button class="measure" id="measure-3"
-                data-measure="3"
-                data-starting-bpm="" data-ending-bpm=""
-                data-starting-tempo-note="" data-ending-tempo-note=""
-                data-start-barline="1"
-                data-end-barline="1"
-                data-tempo-measure-span="1"
-                data-time-signature="5/4"
-                data-rhythm="2,1,1,1,1">
+            <button class="measure" id="measure-3" data-measure="3" data-starting-bpm="" data-ending-bpm=""
+                data-starting-tempo-note="" data-ending-tempo-note="" data-start-barline="1" data-end-barline="1"
+                data-tempo-measure-span="1" data-time-signature="5/4" data-rhythm="2,1,1,1,1">
             </button>
 
-            <button class="measure" id="measure-4"
-                data-measure="4"
-                data-starting-bpm="" data-ending-bpm=""
-                data-starting-tempo-note="" data-ending-tempo-note=""
-                data-start-barline="1"
-                data-end-barline="1"
-                data-tempo-measure-span="1"
-                data-time-signature="6/8"
-                data-rhythm="2,1,1,2,1,1">
+            <button class="measure" id="measure-4" data-measure="4" data-starting-bpm="" data-ending-bpm=""
+                data-starting-tempo-note="" data-ending-tempo-note="" data-start-barline="1" data-end-barline="1"
+                data-tempo-measure-span="1" data-time-signature="6/8" data-rhythm="2,1,1,2,1,1">
             </button>
 
-            <button class="measure" id="measure-5"
-                data-measure="5"
-                data-starting-bpm="120" data-ending-bpm=""
-                data-starting-tempo-note="q" data-ending-tempo-note=""
-                data-start-barline="1"
-                data-end-barline="1"
-                data-tempo-measure-span="1"
-                data-time-signature="5/4"
-                data-rhythm="1,0,0,1,1">
+            <button class="measure" id="measure-5" data-measure="5" data-starting-bpm="120" data-ending-bpm=""
+                data-starting-tempo-note="q" data-ending-tempo-note="" data-start-barline="1" data-end-barline="1"
+                data-tempo-measure-span="1" data-time-signature="5/4" data-rhythm="1,0,0,1,1">
             </button>
 
-<!--
+            <!--
                 <button class="measure" id="measure-1"
                 data-measure="1"
                 data-starting-bpm="120" data-ending-bpm=""
@@ -245,7 +220,8 @@
 
                 <label for="editor-start-tempo">Start tempo</label>
                 <div class="select note-selector" id="editor-tempo-start-note">
-                    <button class="trigger note" aria-controls="editor-tempo-start-note-menu" aria-expanded="false" value="q"></button>
+                    <button class="trigger note" aria-controls="editor-tempo-start-note-menu" aria-expanded="false"
+                        value="q"></button>
                     <menu class="options" id="editor-tempo-start-note-menu">
                         <button class="option note hidden" value="dw"></button>
                         <button class="option note" value="w"></button>
@@ -272,7 +248,8 @@
             <div class="editor-tempo-section">
                 <label for="editor-end-tempo">End tempo</label>
                 <div class="select note-selector" id="editor-tempo-end-note">
-                    <button class="trigger note" aria-controls="editor-tempo-end-note-menu" aria-expanded="false" value="q"></button>
+                    <button class="trigger note" aria-controls="editor-tempo-end-note-menu" aria-expanded="false"
+                        value="q"></button>
                     <menu class="options" id="editor-tempo-end-note-menu">
                         <button class="option note hidden" value="dw"></button>
                         <button class="option note" value="w"></button>
@@ -311,42 +288,54 @@
         <span>Start barline</span>
         <div class="radio-selector" id="editor-start-barline">
             <input value="1" type="radio" name="editor-start-barline" id="editor-start-barline-single">
-            <label class="barline barline-selector" value="1" for="editor-start-barline-single"><span class="visually-hidden">single barline</span></label>
+            <label class="barline barline-selector" value="1" for="editor-start-barline-single"><span
+                    class="visually-hidden">single barline</span></label>
 
             <input value="2" type="radio" name="editor-start-barline" id="editor-start-barline-double">
-            <label class="barline barline-selector" value="2" for="editor-start-barline-double"><span class="visually-hidden">double barline</span></label>
+            <label class="barline barline-selector" value="2" for="editor-start-barline-double"><span
+                    class="visually-hidden">double barline</span></label>
 
             <input value="3" type="radio" name="editor-start-barline" id="editor-start-barline-end">
-            <label class="barline barline-selector" value="3" for="editor-start-barline-end"><span class="visually-hidden">end barline</span></label>
+            <label class="barline barline-selector" value="3" for="editor-start-barline-end"><span
+                    class="visually-hidden">end barline</span></label>
 
             <input value="5" type="radio" name="editor-start-barline" id="editor-start-barline-repeat-end">
-            <label class="barline barline-selector" value="5" for="editor-start-barline-repeat-end"><span class="visually-hidden">repeat end</span></label>
+            <label class="barline barline-selector" value="5" for="editor-start-barline-repeat-end"><span
+                    class="visually-hidden">repeat end</span></label>
 
             <input value="4" type="radio" name="editor-start-barline" id="editor-start-barline-repeat-start">
-            <label class="barline barline-selector" value="4" for="editor-start-barline-repeat-start"><span class="visually-hidden">repeat start</span></label>
+            <label class="barline barline-selector" value="4" for="editor-start-barline-repeat-start"><span
+                    class="visually-hidden">repeat start</span></label>
 
             <input value="7" type="radio" name="editor-start-barline" id="editor-start-barline-none">
-            <label class="barline barline-selector" value="7" for="editor-start-barline-none"><span class="visually-hidden">none</span></label>
+            <label class="barline barline-selector" value="7" for="editor-start-barline-none"><span
+                    class="visually-hidden">none</span></label>
         </div>
         <span>End barline</span>
         <div class="radio-selector" id="editor-end-barline">
             <input value="1" type="radio" name="editor-end-barline" id="editor-end-barline-single">
-            <label class="barline barline-selector" value="1" for="editor-end-barline-single"><span class="visually-hidden">single barline</span></label>
+            <label class="barline barline-selector" value="1" for="editor-end-barline-single"><span
+                    class="visually-hidden">single barline</span></label>
 
             <input value="2" type="radio" name="editor-end-barline" id="editor-end-barline-double">
-            <label class="barline barline-selector" value="2" for="editor-end-barline-double"><span class="visually-hidden">double barline</span></label>
+            <label class="barline barline-selector" value="2" for="editor-end-barline-double"><span
+                    class="visually-hidden">double barline</span></label>
 
             <input value="3" type="radio" name="editor-end-barline" id="editor-end-barline-end">
-            <label class="barline barline-selector" value="3" for="editor-end-barline-end"><span class="visually-hidden">end barline</span></label>
+            <label class="barline barline-selector" value="3" for="editor-end-barline-end"><span
+                    class="visually-hidden">end barline</span></label>
 
             <input value="5" type="radio" name="editor-end-barline" id="editor-end-barline-repeat-end">
-            <label class="barline barline-selector" value="5" for="editor-end-barline-repeat-end"><span class="visually-hidden">repeat end</span></label>
+            <label class="barline barline-selector" value="5" for="editor-end-barline-repeat-end"><span
+                    class="visually-hidden">repeat end</span></label>
 
             <input value="4" type="radio" name="editor-end-barline" id="editor-end-barline-repeat-start">
-            <label class="barline barline-selector" value="4" for="editor-end-barline-repeat-start"><span class="visually-hidden">repeat start</span></label>
+            <label class="barline barline-selector" value="4" for="editor-end-barline-repeat-start"><span
+                    class="visually-hidden">repeat start</span></label>
 
             <input value="7" type="radio" name="editor-end-barline" id="editor-end-barline-none">
-            <label class="barline barline-selector" value="7" for="editor-end-barline-none"><span class="visually-hidden">none</span></label>
+            <label class="barline barline-selector" value="7" for="editor-end-barline-none"><span
+                    class="visually-hidden">none</span></label>
         </div>
 
         <form method="dialog">
